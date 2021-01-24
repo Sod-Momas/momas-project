@@ -27,6 +27,7 @@
 
     <modules>
         <module>momas-test-app</module>
+        <module>momas-eureka-server</module>
     </modules>
 
     <build>
