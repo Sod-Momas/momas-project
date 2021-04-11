@@ -8,6 +8,7 @@
     <version>1.0</version>
     <modules>
         <module>momas-dvdshop</module>
+        <module>momas-petshop</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -25,4 +26,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <junit.version>4.13.1</junit.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.22</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
