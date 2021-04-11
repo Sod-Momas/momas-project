@@ -21,4 +21,11 @@ http://localhost/login.jsp | 展示宠物的页面
 
 ## CLI 命令行访问（功能更全）
 
-(待补充)
+把项目加载进IDE，然后运行 `cc.momas.petshop.ui.MomasPetShopApplication`类
+
+## 项目运行样例
+
+![登录页](docs/WEB-1.png)
+![宠物信息](docs/WEB-2.png)
+![退出](docs/CLI-1.png)
+![交易成功](docs/CLI-2.png)

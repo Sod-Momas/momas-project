@@ -41,31 +41,6 @@
                     <uriEncoding>UTF-8</uriEncoding>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <mainClass>cc.momas.petshop.ui.MomasPetShopApplication</mainClass>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>--module-path</argument> <!-- or -p  -->
-                        <!-- automatically creates the modulepath using all project dependencies,
-                             also adding the project build directory -->
-                        <modulepath/>
-                        <argument>--module</argument> <!-- or -m -->
-                        <argument>momas.petshop/cc.momas.petshop.ui.MomasPetShopApplication</argument>
-                        <argument>-classpath</argument>
-                        <!-- automatically creates the classpath using all project dependencies,
-                             also adding the project build directory -->
-                        <classpath/>
-                        <argument>cc.momas.petshop.ui.MomasPetShopApplication</argument>
-                    </arguments>
-                    <arguments>
-                        ...
-                    </arguments>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>
