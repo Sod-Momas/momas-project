@@ -1,25 +1,43 @@
 /**
- *
+ * 
  */
 package cc.momas.test.newportal.utils;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 /**
  * 通用数据库工具
- *
+ * 
  * @author sothe
- * @version 1.0
+ * @version 2.0
  */
 public final class DBHelper {
-//    private static final String className = "com.mysql.cj.jdbc.Driver";
-//    private static final String jdbcUrl = "jdbc:mysql://127.0.0.1:3306/news?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8";
-//    private static final String username = "root";
-//    private static final String password = "sod";
-//    private Connection conn = null;
-
-    static {
-//		try {
+	private Connection conn = null;
+//
+//  <Resource
+//	name="jdbc/connection"
+//	auth="Container"
+//	type="javax.sql.DataSource"
+//	maxActive="100"
+//	maxIdle="30"
+//	maxWait="10000"
+//	username="root"
+//	password="root"
+//	driverClassName="com.mysql.jdbc.Driver"
+//	url="jdbc:mysql://localhost:3306/news?useUnicode=true&amp;characterEncoding=utf-8"/>
+	
+	/** 默认构造器 */
+	public DBHelper() {
+		//		try {
 //			Context ctx = new InitialContext();
 //			DataSource ds = (DataSource) ctx.lookup("jdbc/connection");
 //			this.conn = ds.getConnection();
@@ -45,12 +63,23 @@ public final class DBHelper {
 //				e.printStackTrace();
 //			}
 //		}
-    }
+		try {
+			Context ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/connection");
+			this.conn = ds.getConnection();
+		} catch (NamingException e1) {
+			System.err.println("JNDI命名空间没有找到");
+			e1.printStackTrace();
+		} catch (SQLException e) {
+			System.err.println("数据库连接池获取连接失败");
+			e.printStackTrace();
+		}
+	}
 
-    /** 用于获取数据库连接 */
-    public Connection getConnection() {
-        return DataSources.getConnection();
-    }
+	/** 用于获取数据库连接 */
+	public Connection getConnection() {
+		return this.conn;
+	}
 
     /** 用于关闭资源 */
     public static void close(PreparedStatement ps, Statement st, ResultSet rs,

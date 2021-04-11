@@ -5,30 +5,12 @@ import java.util.List;
 import cc.momas.test.newportal.dao.INewsDAO;
 import cc.momas.test.newportal.entity.News;
 import cc.momas.test.newportal.service.INewsService;
+import cc.momas.test.newportal.utils.BeanFactory;
 import cc.momas.test.newportal.utils.DBHelper;
 import cc.momas.test.newportal.utils.Pager;
 
 public final class NewsServiceImpl implements INewsService {
-	private INewsDAO newsDao = null;
-
-	/**** getter and setter ****/
-	public INewsDAO getNewsDao() {
-		return newsDao;
-	}
-
-	public void setNewsDao(INewsDAO newsDao) {
-		this.newsDao = newsDao;
-	}
-
-	/**
-	 * 默认构造器
-	 */
-	public NewsServiceImpl() {
-	}
-
-	public NewsServiceImpl(INewsDAO newsDao) {
-		this.newsDao = newsDao;
-	}
+	private INewsDAO newsDao = (INewsDAO)BeanFactory.getBean("newsDao");
 
 	/*   ****功能方法 **** */
 	/**

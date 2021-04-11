@@ -1,21 +1,16 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="cc.momas.test.newportal.entity.Topic"%>
-<%@ include file="/controller/checkLogin.jsp"%>
 <%@page import="cc.momas.test.newportal.entity.News"%>
 <%@page import="cc.momas.test.newportal.entity.News_users"%>
-<%
-	News_users nu = (News_users) session.getAttribute("LOGIN_USER");
-	News news = (News) request.getAttribute("news");
-	List<Topic> topicList = (List<Topic>) request.getAttribute("topicList");
-	
-%><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
-		<title>添加新闻 -<%= nu.getUname() %></title>
+		<title>添加新闻 - ${sessioinScope.LOGIN_USER.uname}</title>
 		<link rel="stylesheet" type="text/css" href="../res/add.css" />
 	</head>
 	<body onbeforeunload="return confirm('系统不会保留当前编辑内容哦!确认离开 ?')" >
-		<form method="post" action="<%=request.getContextPath()+"/controller/doInsert.jsp" %>" >
+		<form enctype="multipart/form-data" method="post" action="${request.contextPath}/servlet/newsServlet?code=3" >
 			<div id="body">
 				<div id="head">
 					<p>
@@ -36,22 +31,19 @@
 						</div>
 					</article>
 					<select name="ntid">
-						<%for(Topic t : topicList){ %>
-						<option value="<%=t.getTid() %>"><%=t.getTname() %></option>
-						<%} %>
+						<c:forEach items="${request.topicList}" var="t" begin="1" step="1" varStatus="s" >
+							<option value="${t.tid}">${t.tname}</option>
+						</c:forEach>
 					</select><br />
+					<input type="file" name ="nfile"/>
+					<br/>
 					<input type="submit" id="submit" value="提交新闻" />
 				</div>
 			</div>
 		</form>
-<%
-	if(request.getParameter("err")!=null)
-	{
-		%>
-		<script type="text/javascript">alter("请将标题/内容填写完整!");</script>
-		<%
-	}
- %>
+		<c:if test="${not empty request.param.err}">
+			<script type="text/javascript">alter("请将标题/内容填写完整!");</script>
+		</c:if>
 	</body>
 
 </html>

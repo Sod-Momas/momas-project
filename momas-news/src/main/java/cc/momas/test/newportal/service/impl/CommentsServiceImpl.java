@@ -5,27 +5,11 @@ import java.util.List;
 import cc.momas.test.newportal.dao.ICommentsDAO;
 import cc.momas.test.newportal.entity.Comments;
 import cc.momas.test.newportal.service.ICommentsService;
+import cc.momas.test.newportal.utils.BeanFactory;
 import cc.momas.test.newportal.utils.DBHelper;
 
 public class CommentsServiceImpl implements ICommentsService {
-	private ICommentsDAO cDao = null;
-
-	/**** getter and setter ****/
-	public ICommentsDAO getcDao() {
-		return cDao;
-	}
-
-	public void setcDao(ICommentsDAO cDao) {
-		this.cDao = cDao;
-	}
-
-	/**** 构造方法 *****/
-	public CommentsServiceImpl() {
-	}
-
-	public CommentsServiceImpl(ICommentsDAO cDao) {
-		this.cDao = cDao;
-	}
+	private ICommentsDAO cDao = (ICommentsDAO) BeanFactory.getBean("commentsDao");
 
 	public int delete(int id) {
 		return cDao.delete(new DBHelper().getConnection(),id);

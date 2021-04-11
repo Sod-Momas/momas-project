@@ -1,33 +1,15 @@
 package cc.momas.test.newportal.service.impl;
 
-import java.sql.Connection;
 import java.util.List;
 
 import cc.momas.test.newportal.dao.INews_usersDAO;
 import cc.momas.test.newportal.entity.News_users;
 import cc.momas.test.newportal.service.INews_usersService;
+import cc.momas.test.newportal.utils.BeanFactory;
 import cc.momas.test.newportal.utils.DBHelper;
 
 public class News_usersServiceImpl implements INews_usersService {
-	private INews_usersDAO nuDao = null;
-
-	/***** getter and setter ****/
-	public INews_usersDAO getNuDao() {
-		return nuDao;
-	}
-
-	public void setNuDao(INews_usersDAO nuDao) {
-		this.nuDao = nuDao;
-	}
-
-	/**** 构造器 *****/
-	public News_usersServiceImpl() {
-
-	}
-
-	public News_usersServiceImpl(INews_usersDAO news_usersDao) {
-		this.nuDao = news_usersDao;
-	}
+	private INews_usersDAO nuDao = (INews_usersDAO) BeanFactory.getBean("news_usersDao");
 
 	public int delete(int id) {
 		return nuDao.delete(new DBHelper().getConnection(), id);
@@ -44,10 +26,9 @@ public class News_usersServiceImpl implements INews_usersService {
 	 */
 	public News_users login(String username, String password) {
 		String sql = "SELECT * FROM news_users WHERE uname = ? AND upwd = ?";
-		System.out.println("hello");
 		Object[] paras = { username, password };
-		Connection conn=new DBHelper().getConnection();
-		List<News_users> nuList = nuDao.queryByTj(conn, sql, paras);
+		List<News_users> nuList = nuDao.queryByTj(new DBHelper()
+				.getConnection(), sql, paras);
 		// if (nuList != null || nuList.size() > 0) {
 		// return nuList.get(0);
 		// }

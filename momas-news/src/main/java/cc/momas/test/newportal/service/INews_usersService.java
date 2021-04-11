@@ -32,10 +32,6 @@ public interface INews_usersService {
 	public List<News_users> queryAll();
 
 	public News_users queryById(int id);
-
-	public INews_usersDAO getNuDao();
-
-	public void setNuDao(INews_usersDAO nuDao);
-
+	
 	public News_users login(String username, String password);
 }

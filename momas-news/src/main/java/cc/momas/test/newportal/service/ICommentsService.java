@@ -33,7 +33,4 @@ public interface ICommentsService {
 
 	public Comments queryById(int id);
 
-	public ICommentsDAO getcDao();
-
-	public void setcDao(ICommentsDAO cDao);
 }

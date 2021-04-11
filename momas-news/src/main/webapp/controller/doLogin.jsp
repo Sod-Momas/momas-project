@@ -18,7 +18,6 @@
 	}
 	//3.根据参数取出数据
 	INews_usersService srv = new News_usersServiceImpl();
-	srv.setNuDao(new News_usersDAOImpl());
 	News_users nu = srv.login(name, pass);
 
 	//4.保存登录信息
@@ -35,5 +34,5 @@
 	}
 
 	//response.sendRedirect(request.getContextPath() + "/view/index.jsp");
-	response.sendRedirect("doQuerypage.jsp?pageNo=1");
+	response.sendRedirect(request.getContextPath()+"/servlet/newsServlet?code=1");
 %>

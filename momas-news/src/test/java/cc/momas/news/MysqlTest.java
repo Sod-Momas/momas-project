@@ -37,7 +37,6 @@ public class MysqlTest {
         String name = "sod";
         String pass = "sod";
         INews_usersService srv = new News_usersServiceImpl();
-        srv.setNuDao(new News_usersDAOImpl());
         News_users nu = srv.login(name, pass);
         System.out.println(nu);
     }

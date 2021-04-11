@@ -5,27 +5,12 @@ import java.util.List;
 import cc.momas.test.newportal.dao.ITopicDAO;
 import cc.momas.test.newportal.entity.Topic;
 import cc.momas.test.newportal.service.ITopicService;
+import cc.momas.test.newportal.utils.BeanFactory;
 import cc.momas.test.newportal.utils.DBHelper;
 
 public class TopicServiceImpl implements ITopicService {
-	private ITopicDAO topicDao = null;
+	private ITopicDAO topicDao = (ITopicDAO) BeanFactory.getBean("topicDao");
 
-	/**** getter and setter *****/
-	public ITopicDAO getTopicDao() {
-		return topicDao;
-	}
-
-	public void setTopicDao(ITopicDAO topicDao) {
-		this.topicDao = topicDao;
-	}
-
-	/**** 构造方法 ****/
-	public TopicServiceImpl() {
-	}
-
-	public TopicServiceImpl(ITopicDAO topicDao) {
-		this.topicDao = topicDao;
-	}
 
 	/**** 功能方法 *****/
 	public int delete(int id) {
@@ -50,8 +35,7 @@ public class TopicServiceImpl implements ITopicService {
 	}
 
 	public int update(Topic topic) {
-		// TODO Auto-generated method stub
-		return 0;
+		return topicDao.update(new DBHelper().getConnection(), topic);
 	}
 
 }

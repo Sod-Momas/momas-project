@@ -26,7 +26,4 @@ public interface ITopicService {
 
 	public Topic queryById(int id);
 	
-	public ITopicDAO getTopicDao();
-	
-	public void setTopicDao(ITopicDAO topicDao);
 }

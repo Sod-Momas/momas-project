@@ -30,9 +30,5 @@ public interface INewsService {
 	public Pager<News> queryByPager(Pager<News> pager);
 	
 	public int queryCountAll();
-
-	public INewsDAO getNewsDao();
-	
-	public void setNewsDao(INewsDAO newsDao);
 	
 }

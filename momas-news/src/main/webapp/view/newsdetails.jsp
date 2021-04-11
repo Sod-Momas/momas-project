@@ -1,8 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ include file="/controller/checkLogin.jsp"%>
 <%@page import="cc.momas.test.newportal.entity.News"%>
 <%@page import="cc.momas.test.newportal.entity.News_users"%>
-<%@ include file="/controller/checkLogin.jsp"%>
 <%
 	News_users nu = (News_users) session.getAttribute("LOGIN_USER");
 	News news = (News) request.getAttribute("news");
@@ -24,17 +22,18 @@
 				<span style="float:left; font-size: small;"> 
 					<a href="javascript:history.go(-1);">后退</a> 
 				</span>
-					
-				<span style="float:right; font-size: small;"> 
-					<%=nu.getUname()%>
-					<a href="<%=request.getContextPath()%>/controller/doLogout.jsp">退出登录</a>
-				</span>
 			</div>
 			<hr width="700px" />
 			<div id="content">
 				<article>
 					<%=news.getNcontent()%>
-					<p></p>
+					<br/>
+					<%if(news.getNpicPath()!=null)
+						{%>
+						<div style="width:90%;">
+							<img width="560px" src="<%=request.getContextPath() + "/upload/news/" + news.getNpicPath() %>"/>
+						</div>
+					<%}%>
 					<div class="summary">
 						<%=news.getNsummary()%>
 					</div>
