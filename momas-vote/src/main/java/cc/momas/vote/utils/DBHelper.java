@@ -1,15 +1,11 @@
 package cc.momas.vote.utils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public final class DBHelper {
 	private Connection conn;
@@ -27,30 +23,16 @@ public final class DBHelper {
 
 	/**
 	 * 用于关闭资源
-	 * 
-	 * @param ps
-	 *            预编译语句
-	 * @param st
-	 *            语句
-	 * @param rs
-	 *            结果集
-	 * @param conn
-	 *            数据库连接
-	 * @throws SQLException 
 	 */
-	public static void close(PreparedStatement ps, Statement st, ResultSet rs,
-			Connection conn) throws SQLException {
-		if (ps != null) {
-			ps.close();
-		}
-		if (st != null) {
-			st.close();
-		}
-		if (rs != null) {
-			rs.close();
-		}
-		if (conn != null) {
-			conn.close();
+	public static void close(AutoCloseable... closeable) {
+		for (AutoCloseable c : closeable) {
+			if (c != null) {
+				try {
+					c.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

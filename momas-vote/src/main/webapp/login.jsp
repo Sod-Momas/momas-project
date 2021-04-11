@@ -3,10 +3,12 @@
 <html>
 
 	<head>
-		<meta charset="GBK">
-		<script src="js/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
-		<script src="js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<meta charset="UTF-8">
+    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<title>登录页</title>
 		<script type="text/javascript">
 			function passwordRight(){
