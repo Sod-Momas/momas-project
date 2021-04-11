@@ -1,0 +1,74 @@
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#body {
+	width: 700px;
+	margin: 0 auto;
+}
+
+#head {
+	text-align: center;
+	vertical-align: baseline;
+	font-size: xx-large;
+	font-weight: bold;
+}
+
+#content {
+	width: 700px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+
+article {
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 20px;
+	line-height: 2em;
+  	font-family: "微软雅黑";
+}
+
+article span {
+	text-align: right;
+	font-size: small;
+	display: block;
+	line-height: 2em;
+	padding: 1em 2em 0 0;
+}
+
+article .summary {
+	margin-top: 20px;
+	padding: 10px;
+	width: 90%;
+	margin: 0 auto;
+	font-size: smaller;
+	border-radius: 5px;
+	background-color: rgba(225, 200, 67, 0.3);
+	  
+}
+article .summary textarea{
+	min-width: 550px;
+    max-width: 550px;
+    min-height: 2em;
+}
+#ntitle {
+	text-align: center;
+	vertical-align: baseline;
+	font-size: xx-large;
+	font-weight: bold;
+}
+#Ncontent {
+	box-shadow: 2px 2px 0px 0px rgba(226, 208, 94, 0.71);
+	min-width: 660px;
+	max-width: 660px;
+	min-height: 200px;
+}
+#submit{
+	padding: 1em;
+}

@@ -10,6 +10,7 @@
         <module>momas-dvdshop</module>
         <module>momas-petshop</module>
         <module>momas-vote</module>
+        <module>momas-news</module>
     </modules>
     <packaging>pom</packaging>
 
