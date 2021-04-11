@@ -1,0 +1,18 @@
+	#记得把mysql数据库驱动放进Tomcat的lib/目录下面
+	#在服务器Tomcat的conf/context.xml中输入以下内容作为jndi数据库连接池支持
+	
+	<Resource
+	name="jdbc/vote"
+	auth="Container"
+	type="javax.sql.DataSource"
+	maxActive="100"
+	maxIdle="30"
+	maxWait="10000"
+	username="root"
+	password="mysqlniwo,1"
+	driverClassName="com.mysql.jdbc.Driver"
+	url="jdbc:mysql://www.momas.cc:3306/vote?useUnicode=true&amp;characterEncoding=utf-8"/>
+	
+	
+	
+	#################
