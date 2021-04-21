@@ -1,0 +1,7 @@
+
+# 旧Excel路径,必填
+oldFilePath: /excel/网监敏感词20180428.xlsx
+# 新Excel路径,不填时程序生成完整的sql语句
+newFilePath: /excel/网监敏感词20180528.xlsx
+# 生成sql文件路径,必填
+destFilePath: src/main/resources/excel/dest.sql

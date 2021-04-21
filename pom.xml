@@ -11,6 +11,7 @@
         <module>momas-petshop</module>
         <module>momas-vote</module>
         <module>momas-news</module>
+        <module>momas-badword-diff</module>
     </modules>
     <packaging>pom</packaging>
 
