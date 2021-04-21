@@ -1,4 +1,4 @@
-# badword.diff
+# momas-badword-diff
 
 这个工具用来把网监敏感词Excel转成SQL,方便将数据录入数据库
 
