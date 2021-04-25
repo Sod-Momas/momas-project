@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	
+	<package name="cars" namespace="/" extends="json-default">
+		
+		<action name="carinfo*" class="CarinfoAction" method="{1}">
+			<result name="success">
+				/page/main.jsp
+			</result>	
+			<result name="toadd">
+				/page/add.jsp
+			</result>
+			<result name="addsuccess" type="redirect">
+				/carinfomain
+			</result>
+		</action>
+		
+		<action name="carbrand*" class="BrandAction" method="{1}">
+			<result type="json">
+				<param name="blist">
+					blist\[\d+\]\.brandid,blist\[\d+\]\.brandname
+				</param>
+			</result>		
+		</action>
+		
+		<action name="carmodal*" class="CarmodalAction" method="{1}">
+			<result type="json">
+				<param name="includeProperties">
+					mlist\[\d+\]\.modelid,mlist\[\d+\]\.modalname
+				</param>
+			</result>		
+		</action>
+	</package>
+</struts>    
