@@ -13,6 +13,7 @@
         <module>momas-vote</module>
         <module>momas-news</module>
         <module>momas-badword-diff</module>
+        <module>momas-houses-tenancy</module>
     </modules>
     <packaging>pom</packaging>
 

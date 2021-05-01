@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<!-- 项目编码 -->
+	<constant name="struts.i18n.encoding" value="UTF-8"/>
+	<!-- 开发模式 -->
+	<constant name="struts.devMode" value="true"/>
+	<!-- ui主题 -->
+	<constant name="struts.ui.theme" value="simple" />
+	
+	<package name="baseAuthorPackage" abstract="true" extends="json-default">
+		<interceptors>
+			<interceptor name="authorInterceptor" class="cc.momas.housetenacy.web.interceptor.AuthorInterceptor" />
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="authorInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="myStack" />
+		<global-results>
+			<result name="login" type="redirect">/login.jsp</result>
+		</global-results>
+	</package>
+	
+	<package name="users" namespace="/users" extends="struts-default">
+		<global-results>
+			<result name="login" type="redirect">/login.jsp</result>
+		</global-results>
+		<action name="user*" class="cc.momas.housetenacy.web.action.UserAction" method="{1}">
+			<result name="loginsuccess" type="redirectAction">
+				<param name="namespace">/house</param>
+				<param name="actionName">housequeryAll</param>
+			</result>
+			<result name="regsuccess">
+				/WEB-INF/content/users/regSuccess.jsp
+			</result>
+		</action>
+	</package>
+	
+	<package name="house" namespace="/house" extends="baseAuthorPackage">
+		<action name="house*" class="cc.momas.housetenacy.web.action.HouseAction" method="{1}">
+			<result name="queryallhouse">
+				/WEB-INF/content/house/message.jsp
+			</result>
+			<result name="toaddhouse">
+				/WEB-INF/content/house/add.jsp
+			</result>
+			<result name="querytypesjson" type="json">
+				<!-- 用正则表达式匹配 -->
+				<param name="includeProperties">
+					typesList\[\d+\]\.id,typesList\[\d+\]\.name
+				</param>
+			</result>
+			<result name="queryAllByTjPager" type="json">
+				<!-- 会传一个pager,可能不需要转换 -->
+				<param name="pager">
+					pager\[\d+\]\.firstIndex,
+					pager\[\d+\]\.pageNo,
+					pager\[\d+\]\.totalPageCount,
+					qb\[\d+\]\.districtId,
+					qb\[\d+\]\.floorAge,
+					qb\[\d+\]\.price,
+					qb\[\d+\]\.streetId,
+					qb\[\d+\]\.title,
+					qb\[\d+\]\.typesId
+				</param>
+			</result>
+			
+			<result name="addsuccess">
+				/WEB-INF/content/house/success2.jsp
+			</result>
+		</action>
+
+	</package>
+	
+	<package name="district" namespace="/district" extends="baseAuthorPackage">
+		<action name="district*" class="cc.momas.housetenacy.web.action.DistrictAction" method="{1}">
+			<result name="showdistrict" type="json">
+				<!-- 用正则表达式匹配 -->
+				<param name="includeProperties">
+					districtList\[\d+\]\.id,districtList\[\d+\]\.name
+				</param>
+			</result>
+			<result name="showstreestbydistrict" type="json">
+				<!-- 用正则表达式匹配 -->
+				<param name="includeProperties">
+					district\.streets,district\.streets\[\d+\]\.name,,district\.streets\[\d+\]\.id
+				</param>
+			</result>
+		</action>
+	</package>
+	
+	<!-- 验证码 -->
+	<package name="code" extends="struts-default">
+		<action name="validate" class="cc.momas.housetenacy.web.action.CodeAction"
+			method="code">
+			<result name="success" type="stream">
+				<param name="contentType">image/png</param>
+				<!-- 需要保证Action里面有对应的get/set -->
+				<param name="inputName">is</param>
+			</result>
+		</action>
+	</package>
+	
+
+</struts>    
