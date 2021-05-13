@@ -14,6 +14,7 @@
         <module>momas-news</module>
         <module>momas-badword-diff</module>
         <module>momas-houses-tenancy</module>
+        <module>momas-wesay</module>
     </modules>
     <packaging>pom</packaging>
 
