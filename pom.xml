@@ -17,6 +17,7 @@
         <module>momas-wesay</module>
         <module>momas-news-admin</module>
         <module>momas-announcer</module>
+        <module>momas-smbms</module>
     </modules>
     <packaging>pom</packaging>
 

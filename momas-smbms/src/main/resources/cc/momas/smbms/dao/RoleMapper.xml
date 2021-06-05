@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cc.momas.smbms.dao.RoleMapper">
+
+	<select id="count" resultType="int">
+		SELECT count(*) FROM <include refid="TABLE_NAME"/>
+	</select>
+	
+	<select id="queryAll" resultMap="roleResultMap">
+		SELECT <include refid="ALL_COLUMN"/> FROM <include refid="TABLE_NAME"/>
+	</select>
+	
+	<insert id="add" parameterType="Role">
+		INSERT INTO <include refid="TABLE_NAME"/>(<include refid="COLUMN_WITHOUT_ID"/>)
+		VALUES(
+			#{roleCode},
+			#{roleName},
+			#{createdBy},
+			#{creationDate},
+			#{modifyBy},
+			#{modifyDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE <include refid="TABLE_NAME"/>
+		<set>
+			<if test="roleCode != null">roleCode=#{roleCode},</if>
+			<if test="roleName != null">roleName=#{roleName},</if>
+			<if test="createdBy != null">createdBy=#{createdBy},</if>
+			<if test="creationDate != null">creationDate=#{creationDate},</if>
+			<if test="modifyBy != null">modifyBy=#{modifyBy},</if> 
+			<if test="creationDate != null">creationDate=#{creationDate}</if>
+		</set>
+		WHERE id=#{roleId}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM <include refid="TABLE_NAME"/>
+		WHERE id=#{roleId}
+	</delete>
+	
+	<resultMap id="roleResultMap" type="Role">
+		<id		property="roleId"		column="id"/>
+		<result property="roleCode"		column="roleCode"/>
+		<result property="roleName"		column="roleName"/>
+		<result property="createdBy"		column="createdBy"/>
+		<result property="creationDate" column="creationDate"/>
+		<result property="modifyBy"		column="modifyBy"/>
+		<result property="modifyDate"	column="modifyDate"/>
+	</resultMap>
+	
+	
+	<sql id="TABLE_NAME">
+		smbms_role
+	</sql>
+	<sql id="ALL_COLUMN">
+		id,
+		<include refid="COLUMN_WITHOUT_ID"/>
+	</sql>
+	<sql id="COLUMN_WITHOUT_ID">
+		roleCode,
+		roleName,
+		createdBy,
+		creationDate,
+		modifyBy,
+		modifyDate	
+	</sql>
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cc.momas.smbms.dao.UserMapper">
+
+	<select id="count" resultType="int">
+		SELECT count(*) FROM <include refid="TABLE_NAME"/>
+	</select>
+	
+	<select id="queryAll" resultMap="userResultMap">
+		SELECT <include refid="ALL_COLUMN"/> FROM <include refid="TABLE_NAME"/>
+	</select>
+	
+	<select id="queryById" resultMap="userResultMap">
+		SELECT <include refid="ALL_COLUMN"/> 
+		FROM <include refid="TABLE_NAME"/>
+		WHERE id=#{id}
+	</select>
+	
+	<select id="queryByPassword" resultMap="userResultMap">
+		SELECT <include refid="ALL_COLUMN"/> 
+		FROM <include refid="TABLE_NAME"/>
+		WHERE userName=#{userName} AND userPassword=#{userPassword}
+	</select>
+	
+
+	<insert id="add" parameterType="User">
+		INSERT INTO <include refid="TABLE_NAME"/>(<include refid="COLUMN_WITHOUT_ID"/>)
+		VALUES(
+			#{userCode},
+			#{userName},
+			#{userPassword},
+			#{gender},
+			#{birthday},
+			#{phone},
+			#{address},
+			#{userRole},
+			#{createdBy},
+			#{creationDate},
+			#{modifyBy},
+			#{modifyDate}
+		)
+	</insert>
+	
+	<delete id="delete">
+		DELETE FROM <include refid="TABLE_NAME"/>
+		WHERE id=#{userId}
+	</delete>
+	
+	<update id="update">
+		UPDATE <include refid="TABLE_NAME"/>
+		<set>
+			<if test="birthday != null">birthday=#{birthday},</if>
+			<if test="userCode != null">userCode=#{userCode},</if>
+			<if test="userName != null">userName=#{userName},</if>
+			<if test="userPassword != null">userPassword=#{userPassword},</if>
+			<if test="gender != null">gender=#{gender},</if>
+			<if test="phone != null">phone=#{phone},</if>
+			<if test="address != null">address=#{address},</if>
+			<if test="userRole != null">userRole=#{userRole},</if>
+			<if test="createdBy != null">createdBy=#{createdBy},</if>
+			<if test="creationDate != null">creationDate=#{creationDate},</if>
+			<if test="modifyBy != null">modifyBy=#{modifyBy},</if> 
+			<if test="creationDate != null">creationDate=#{creationDate}</if>
+		</set>
+		WHERE id=#{userId}
+	</update>
+	
+	<resultMap id="userResultMap" type="User">
+		<id		property="userId"		column="id" />
+		<result property="birthday"		column="birthday" />
+		<result property="userCode"		column="userCode" />
+		<result property="userName"		column="userName" />
+		<result property="userPassword"	column="userPassword" />
+		<result property="gender"		column="gender" />
+		<result property="phone"		column="phone" />
+		<result property="address"		column="address" />
+		<result property="userRole"		column="userRole" />
+		<result property="createdBy"	column="createdBy" />
+		<result property="creationDate" column="creationDate" />
+		<result property="modifyBy"		column="modifyBy" />
+		<result property="creationDate"	column="creationDate" />
+	</resultMap>
+	
+	<sql id="TABLE_NAME">
+		smbms_user
+	</sql>
+	
+	<sql id="COLUMN_WITHOUT_ID">
+		userCode	,
+		userName	,
+		userPassword,
+		gender		,
+		birthday	,
+		phone		,
+		address		,
+		userRole	,
+		createdBy	,
+		creationDate,
+		modifyBy	,
+		modifyDate	
+	</sql>
+	
+	<sql id="ALL_COLUMN">
+		id,
+		<include refid="COLUMN_WITHOUT_ID"/>
+	</sql>
+	
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="database.properties"/>
+	
+	
+	<typeAliases>
+		<package name="cc.momas.smbms.entity"/>
+	</typeAliases>
+	
+	<!-- 配置环境,default指定了默认环境用development -->
+	<environments default="development">
+		<environment id="development">
+			<!--内置  type=”[UNPOOLED|POOLED|JNDI]” -->
+			<transactionManager type="JDBC"/>
+			<!-- POOLED:mybatis自带的数据源，JNDI:基于tomcat的数据源 -->
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<package name="cc.momas.smbms.dao"/>
+	</mappers>
+	
+</configuration>

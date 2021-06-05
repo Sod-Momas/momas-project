@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cc.momas.smbms.dao.AddressMapper">
+
+	<select id="count" resultType="int">
+		SELECT count(*) FROM <include refid="TABLE_NAME"/>
+	</select>
+	
+	<select id="queryAll" resultMap="addressResultMap">
+		SELECT <include refid="ALL_COLUMN"/> FROM <include refid="TABLE_NAME"/>
+	</select>
+	
+	<insert id="add" parameterType="Address">
+		INSERT INTO <include refid="TABLE_NAME"/>(<include refid="ALL_COLUMN"/>)
+		VALUES(
+			null,
+			#{contact},
+			#{addressDesc},
+			#{postCode},
+			#{tel},
+			#{createdBy},
+			#{creationDate},
+			#{modifyBy},
+			#{modifyDate},
+			#{userId}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE <include refid="TABLE_NAME" />
+		<set>
+			<if test="contact != null">contact=#{contact},</if>
+			<if test="addressDesc != null">addressDesc=#{addressDesc},</if>
+			<if test="postCode != null">postCode=#{postCode},</if>
+			<if test="tel != null">tel=#{tel},</if>
+			<if test="createdBy != null">createdBy=#{createdBy},</if>
+			<if test="creationDate != null">creationDate=#{creationDate},</if>
+			<if test="modifyBy != null">modifyBy=#{modifyBy},</if>
+			<if test="creationDate != null">creationDate=#{creationDate},</if>
+			<if test="userId != null">userId=#{userId}</if>
+		</set>
+		WHERE id=#{addrId}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM <include refid="TABLE_NAME"/>
+		WHERE id=#{addrId}
+	</delete>
+	
+	<resultMap id="addressResultMap" type="Address">
+		<id		property="addrId"		column="id"/>
+		<result	property="contact"		column="contact"/>
+		<result	property="addressDesc"	column="addressDesc"/>
+		<result	property="postCode"		column="postCode"/>
+		<result	property="tel"			column="tel"/>
+		<result	property="createdBy"	column="createdBy"/>
+		<result	property="creationDate"	column="creationDate"/>
+		<result	property="modifyBy"		column="modifyBy"/>
+		<result	property="modifyDate"	column="modifyDate"/>
+		<result	property="userId"		column="userId"/>
+	</resultMap>
+	
+	<sql id="TABLE_NAME">
+		smbms_address
+	</sql>
+	
+	<sql id="ALL_COLUMN">
+		id,
+		contact,
+		addressDesc,
+		postCode,
+		tel,
+		createdBy,
+		creationDate,
+		modifyBy,
+		modifyDate,
+		userId
+	</sql>
+</mapper>

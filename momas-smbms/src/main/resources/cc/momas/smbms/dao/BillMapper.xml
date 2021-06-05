@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cc.momas.smbms.dao.BillMapper">
+
+	<select id="count" resultType="int">
+		SELECT count(*) FROM <include refid="TABLE_NAME"/>
+	</select>
+	
+	<select id="qeuryAll" resultMap="billResultMap">
+		SELECT <include refid="ALL_COLUMN"/> FROM <include refid="TABLE_NAME"/>
+	</select>
+	
+	<select id="queryById" resultMap="billResultMap">
+		SELECT <include refid="ALL_COLUMN"/> 
+		FROM <include refid="TABLE_NAME"/>
+		WHERE id=#{id}
+	</select>
+	
+	<insert id="add" parameterType="Bill">
+		INSERT INTO <include refid="TABLE_NAME"/>(<include refid="COLUMN_WITHOUT_ID"/>)
+		VALUES(
+			#{billCode},
+			#{productName},
+			#{productDesc},
+			#{productUnit},
+			#{productCount},
+			#{totalPrice},
+			#{isPayment},
+			#{createdBy},
+			#{creationDate},
+			#{modifyBy},
+			#{modifyDate},
+			#{providerId}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE
+		<include refid="TABLE_NAME" />
+		<set>
+			<if test="billCode != null">billCode=#{billCode},</if>
+			<if test="productName != null">productName=#{productName},</if>
+			<if test="productDesc != null">productDesc=#{productDesc},</if>
+			<if test="productUnit != null">productUnit=#{productUnit},</if>
+			<if test="productCount != null">productCount=#{productCount},</if>
+			<if test="totalPrice != null">totalPrice=#{totalPrice},</if>
+			<if test="isPayment != null">isPayment=#{isPayment},</if>
+			<if test="createdBy != null">createdBy=#{createdBy},</if>
+			<if test="creationDate != null">creationDate=#{creationDate},</if>
+			<if test="modifyBy != null">modifyBy=#{modifyBy},</if>
+			<if test="creationDate != null">creationDate=#{creationDate},</if>
+			<if test="providerId != null">providerId=#{providerId},</if>
+		</set>
+		WHERE id=#{billId}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM <include refid="TABLE_NAME"/>
+		WHERE id=#{billId}
+	</delete>
+	
+	
+	<resultMap id="billResultMap" type="Bill">
+		<id		property="billId"		column="id"/>
+		<result	property="billCode"		column="billCode"/>
+		<result	property="productName"	column="productName"/>
+		<result	property="productDesc"	column="productDesc"/>
+		<result	property="productUnit"	column="productUnit"/>
+		<result	property="productCount"	column="productCount"/>
+		<result	property="totalPrice"	column="totalPrice"/>
+		<result	property="isPayment"	column="isPayment"/>
+		<result	property="createdBy"	column="createdBy"/>
+		<result	property="creationDate"	column="creationDate"/>
+		<result	property="modifyBy"		column="modifyBy"/>
+		<result	property="modifyDate"	column="modifyDate"/>
+		<result	property="providerId"	column="providerId"/>
+	</resultMap>
+	
+	<sql id="TABLE_NAME">
+		smbms_bill
+	</sql>
+	<sql id="COLUMN_WITHOUT_ID">
+		billCode,
+		productName,
+		productDesc,
+		productUnit,
+		productCount,
+		totalPrice,
+		isPayment,
+		createdBy,
+		creationDate,
+		modifyBy,
+		modifyDate,
+		providerId
+	</sql>
+	<sql id="ALL_COLUMN">
+		id,
+		<include refid="COLUMN_WITHOUT_ID"/>
+	</sql>
+</mapper>
