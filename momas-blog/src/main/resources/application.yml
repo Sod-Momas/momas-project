@@ -1,0 +1,28 @@
+spring:
+  thymeleaf:
+    cache: false
+  mvc:
+    date-format: yyyy-MM-dd
+  datasource:
+    username: root
+    password: Myniwo,1
+    #    password: sod
+    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&serverTimezone=UTC&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: cc.momas.blog.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+comment:
+  avatar: /image/1.jpg
+server:
+  port: 8081
+logging:
+  level:
+    web: debug

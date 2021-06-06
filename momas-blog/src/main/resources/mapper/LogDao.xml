@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.momas.blog.dao.LogDao">
+
+    <resultMap id="Log" type="cc.momas.blog.pojo.Log">
+        <id property="id" column="id"/>
+        <result property="time" column="time"/>
+        <result property="type" column="type"/>
+        <result property="detail" column="detail"/>
+        <result property="ip" column="ip"/>
+    </resultMap>
+
+    <select id="getLogByStartAndLimit" resultType="cc.momas.blog.pojo.Log">
+        SELECT `id`, `time`, `type`, `detail`, `ip`
+        FROM t_log
+        ORDER BY id DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+        <if test="start != null">
+            OFFSET #{start}
+        </if>
+    </select>
+
+    <select id="getLogCount" resultType="int">
+        SELECT count(*)FROM t_log
+    </select>
+
+    <delete id="deleteLogByIds">
+        delete from t_log
+        WHERE id in
+        <foreach item="item" collection="tagIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insertSelective" parameterType="cc.momas.blog.pojo.Log">
+        INSERT INTO t_log ( `time`, `type`, `detail`, `ip`)
+        VALUES (#{record.time},#{record.type},#{record.detail},#{record.ip});
+    </insert>
+
+</mapper>

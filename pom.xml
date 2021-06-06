@@ -18,6 +18,7 @@
         <module>momas-news-admin</module>
         <module>momas-announcer</module>
         <module>momas-smbms</module>
+        <module>momas-blog</module>
     </modules>
     <packaging>pom</packaging>
 
