@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cc.momas.customer.mapper.ShopsMapper">
+	<resultMap id="BaseResultMap" type="cc.momas.customer.pojo.Shops">
+		<id column="SHOP_ID" property="shopId" jdbcType="INTEGER" />
+		<result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
+		<result column="SHOP_CATEGORY_ID" property="shopCategoryId" jdbcType="INTEGER" />
+		<result column="SHOP_CONTACTNAME" property="shopContactname" jdbcType="VARCHAR" />
+		<result column="SHOP_CONTACTTEL" property="shopContacttel" jdbcType="VARCHAR" />
+		<result column="SHOP_ADDRESS" property="shopAddress" jdbcType="VARCHAR" />
+		<result column="SHOP_REMARK" property="shopRemark" jdbcType="VARCHAR" />
+		<result column="SHOP_ISHASSETADMIN" property="shopIshassetadmin" jdbcType="INTEGER" />
+		<result column="SHOP_CREATETIME" property="shopCreatetime" jdbcType="TIMESTAMP" />
+		<result column="SHOP_ISDEL" property="shopIsdel" jdbcType="INTEGER" />
+		<association column="SHOP_CATEGORY_ID" property="categories" select="cc.momas.customer.mapper.CategoriesMapper.selectByPrimaryKey" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		SHOP_ID, SHOP_NAME, SHOP_CATEGORY_ID, SHOP_CONTACTNAME,
+		SHOP_CONTACTTEL, SHOP_ADDRESS,
+		SHOP_REMARK, SHOP_ISHASSETADMIN, SHOP_CREATETIME, SHOP_ISDEL
+	</sql>
+
+	<select id="selectByPager" resultMap="BaseResultMap" parameterType="cc.momas.customer.pojo.Pager">
+		<!-- 这个SELECT 是从 selectByExample 复制过来的 -->
+		select
+		<!-- 改这里 -->
+		<if test="entityExample.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shops
+		<if test="_parameter != null">
+			<where>
+				<!-- 这个where从 Example_Where_Clause 复制过来的  -->
+				<foreach collection="entityExample.oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition} #{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition} #{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem"
+											open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</where>
+		</if>
+		<!-- 改这里 -->
+		<if test="entityExample.orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<!-- 加这里 -->
+		LIMIT ${firstIndex},${pageSize}
+	</select>
+
+	<select id="selectByExample" resultMap="BaseResultMap" parameterType="cc.momas.customer.pojo.ShopsExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shops
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from shops
+		where SHOP_ID = #{shopId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from shops
+		where SHOP_ID = #{shopId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="cc.momas.customer.pojo.ShopsExample">
+		delete from shops
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="cc.momas.customer.pojo.Shops">
+		insert into shops (SHOP_ID, SHOP_NAME, SHOP_CATEGORY_ID,
+		SHOP_CONTACTNAME, SHOP_CONTACTTEL, SHOP_ADDRESS,
+		SHOP_REMARK, SHOP_ISHASSETADMIN, SHOP_CREATETIME,
+		SHOP_ISDEL)
+		values (#{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR},
+		#{shopCategoryId,jdbcType=INTEGER},
+		#{shopContactname,jdbcType=VARCHAR},
+		#{shopContacttel,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR},
+		#{shopRemark,jdbcType=VARCHAR}, #{shopIshassetadmin,jdbcType=INTEGER},
+		#{shopCreatetime,jdbcType=TIMESTAMP},
+		#{shopIsdel,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="cc.momas.customer.pojo.Shops">
+		<!-- WARNING - @mbggenerated This element is automatically generated by 
+			MyBatis Generator, do not modify. This element was generated on Mon Nov 20 
+			16:13:07 CST 2017. -->
+		insert into shops
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="shopId != null">
+				SHOP_ID,
+			</if>
+			<if test="shopName != null">
+				SHOP_NAME,
+			</if>
+			<if test="shopCategoryId != null">
+				SHOP_CATEGORY_ID,
+			</if>
+			<if test="shopContactname != null">
+				SHOP_CONTACTNAME,
+			</if>
+			<if test="shopContacttel != null">
+				SHOP_CONTACTTEL,
+			</if>
+			<if test="shopAddress != null">
+				SHOP_ADDRESS,
+			</if>
+			<if test="shopRemark != null">
+				SHOP_REMARK,
+			</if>
+			<if test="shopIshassetadmin != null">
+				SHOP_ISHASSETADMIN,
+			</if>
+			<if test="shopCreatetime != null">
+				SHOP_CREATETIME,
+			</if>
+			<if test="shopIsdel != null">
+				SHOP_ISDEL,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="shopId != null">
+				#{shopId,jdbcType=INTEGER},
+			</if>
+			<if test="shopName != null">
+				#{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="shopCategoryId != null">
+				#{shopCategoryId,jdbcType=INTEGER},
+			</if>
+			<if test="shopContactname != null">
+				#{shopContactname,jdbcType=VARCHAR},
+			</if>
+			<if test="shopContacttel != null">
+				#{shopContacttel,jdbcType=VARCHAR},
+			</if>
+			<if test="shopAddress != null">
+				#{shopAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="shopRemark != null">
+				#{shopRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="shopIshassetadmin != null">
+				#{shopIshassetadmin,jdbcType=INTEGER},
+			</if>
+			<if test="shopCreatetime != null">
+				#{shopCreatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="shopIsdel != null">
+				#{shopIsdel,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="cc.momas.customer.pojo.ShopsExample"
+		resultType="java.lang.Integer">
+		<!-- WARNING - @mbggenerated This element is automatically generated by 
+			MyBatis Generator, do not modify. This element was generated on Mon Nov 20 
+			16:13:07 CST 2017. -->
+		select count(*) from shops
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		<!-- WARNING - @mbggenerated This element is automatically generated by 
+			MyBatis Generator, do not modify. This element was generated on Mon Nov 20 
+			16:13:07 CST 2017. -->
+		update shops
+		<set>
+			<if test="record.shopId != null">
+				SHOP_ID = #{record.shopId,jdbcType=INTEGER},
+			</if>
+			<if test="record.shopName != null">
+				SHOP_NAME = #{record.shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shopCategoryId != null">
+				SHOP_CATEGORY_ID = #{record.shopCategoryId,jdbcType=INTEGER},
+			</if>
+			<if test="record.shopContactname != null">
+				SHOP_CONTACTNAME = #{record.shopContactname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shopContacttel != null">
+				SHOP_CONTACTTEL = #{record.shopContacttel,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shopAddress != null">
+				SHOP_ADDRESS = #{record.shopAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shopRemark != null">
+				SHOP_REMARK = #{record.shopRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shopIshassetadmin != null">
+				SHOP_ISHASSETADMIN = #{record.shopIshassetadmin,jdbcType=INTEGER},
+			</if>
+			<if test="record.shopCreatetime != null">
+				SHOP_CREATETIME = #{record.shopCreatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.shopIsdel != null">
+				SHOP_ISDEL = #{record.shopIsdel,jdbcType=INTEGER},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		<!-- WARNING - @mbggenerated This element is automatically generated by 
+			MyBatis Generator, do not modify. This element was generated on Mon Nov 20 
+			16:13:07 CST 2017. -->
+		update shops
+		set SHOP_ID = #{record.shopId,jdbcType=INTEGER},
+		SHOP_NAME = #{record.shopName,jdbcType=VARCHAR},
+		SHOP_CATEGORY_ID = #{record.shopCategoryId,jdbcType=INTEGER},
+		SHOP_CONTACTNAME = #{record.shopContactname,jdbcType=VARCHAR},
+		SHOP_CONTACTTEL = #{record.shopContacttel,jdbcType=VARCHAR},
+		SHOP_ADDRESS = #{record.shopAddress,jdbcType=VARCHAR},
+		SHOP_REMARK = #{record.shopRemark,jdbcType=VARCHAR},
+		SHOP_ISHASSETADMIN = #{record.shopIshassetadmin,jdbcType=INTEGER},
+		SHOP_CREATETIME = #{record.shopCreatetime,jdbcType=TIMESTAMP},
+		SHOP_ISDEL = #{record.shopIsdel,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="cc.momas.customer.pojo.Shops">
+		<!-- WARNING - @mbggenerated This element is automatically generated by 
+			MyBatis Generator, do not modify. This element was generated on Mon Nov 20 
+			16:13:07 CST 2017. -->
+		update shops
+		<set>
+			<if test="shopName != null">
+				SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="shopCategoryId != null">
+				SHOP_CATEGORY_ID = #{shopCategoryId,jdbcType=INTEGER},
+			</if>
+			<if test="shopContactname != null">
+				SHOP_CONTACTNAME = #{shopContactname,jdbcType=VARCHAR},
+			</if>
+			<if test="shopContacttel != null">
+				SHOP_CONTACTTEL = #{shopContacttel,jdbcType=VARCHAR},
+			</if>
+			<if test="shopAddress != null">
+				SHOP_ADDRESS = #{shopAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="shopRemark != null">
+				SHOP_REMARK = #{shopRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="shopIshassetadmin != null">
+				SHOP_ISHASSETADMIN = #{shopIshassetadmin,jdbcType=INTEGER},
+			</if>
+			<if test="shopCreatetime != null">
+				SHOP_CREATETIME = #{shopCreatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="shopIsdel != null">
+				SHOP_ISDEL = #{shopIsdel,jdbcType=INTEGER},
+			</if>
+		</set>
+		where SHOP_ID = #{shopId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cc.momas.customer.pojo.Shops">
+		<!-- WARNING - @mbggenerated This element is automatically generated by 
+			MyBatis Generator, do not modify. This element was generated on Mon Nov 20 
+			16:13:07 CST 2017. -->
+		update shops
+		set SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+		SHOP_CATEGORY_ID = #{shopCategoryId,jdbcType=INTEGER},
+		SHOP_CONTACTNAME = #{shopContactname,jdbcType=VARCHAR},
+		SHOP_CONTACTTEL = #{shopContacttel,jdbcType=VARCHAR},
+		SHOP_ADDRESS = #{shopAddress,jdbcType=VARCHAR},
+		SHOP_REMARK = #{shopRemark,jdbcType=VARCHAR},
+		SHOP_ISHASSETADMIN = #{shopIshassetadmin,jdbcType=INTEGER},
+		SHOP_CREATETIME = #{shopCreatetime,jdbcType=TIMESTAMP},
+		SHOP_ISDEL = #{shopIsdel,jdbcType=INTEGER}
+		where SHOP_ID = #{shopId,jdbcType=INTEGER}
+	</update>
+</mapper>
