@@ -8,7 +8,7 @@
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>cc.momas</groupId>
     <artifactId>momas-customer</artifactId>
     <version>0.1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -17,6 +17,7 @@
         <module>momas-customer-mapper</module>
         <module>momas-customer-pojo</module>
         <module>momas-customer-service</module>
+        <module>momas-customer-web</module>
     </modules>
 
     <properties>

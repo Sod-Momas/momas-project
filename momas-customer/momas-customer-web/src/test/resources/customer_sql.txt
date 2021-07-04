@@ -1,0 +1,305 @@
+﻿
+DROP DATABASE IF EXISTS customer;
+CREATE DATABASE customer;
+USE customer;
+
+create table CARDLEVELS
+(
+  CARDLEVELS_ID        INTEGER  not null AUTO_INCREMENT  comment '等级编号',
+  CARDLEVELS_LEVELNAME VARCHAR(50) comment '等级名称',
+  CARDLEVELS_NEEDPOINT INTEGER(7) comment '所需最大积分',
+  CARDLEVELS_POINT     FLOAT(3,2) comment '(兑换)积分比例',
+  CARDLEVELS_PERCENT   FLOAT(3,2) comment '折扣比例',
+  CONSTRAINT  PK_CARDLEVELS primary key (CARDLEVELS_ID)
+)ENGINE=InnoDB DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci COMMENT='会员等级';
+
+create table CATEGORIES
+(
+  CATEGORY_ID    INTEGER not null AUTO_INCREMENT  comment '等级编号',
+  CATEGORY_NAME  VARCHAR(20) comment '类别说明',
+  CATEGORY_TITLE VARCHAR(20) comment '类别标题',
+  CATEGORY_PID   INTEGER comment '类别父ID',
+  CATEGORY_ISDEL INTEGER(1) comment '类别是否删除 1 删除 0 正常',
+  constraint PK_CATEGORIES primary key (CATEGORY_ID)
+)ENGINE=InnoDB DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci COMMENT='类别';
+
+create table SHOPS
+(
+  SHOP_ID            INTEGER not null AUTO_INCREMENT  comment '店铺编号',
+  SHOP_NAME          VARCHAR(20) comment '店铺名称',
+  SHOP_CATEGORY_ID   INTEGER comment '类别ID',
+  SHOP_CONTACTNAME   VARCHAR(20) comment '联系人',
+  SHOP_CONTACTTEL    VARCHAR(20) comment '联系电话',
+  SHOP_ADDRESS       VARCHAR(50) comment '地址',
+  SHOP_REMARK        VARCHAR(100) comment '备注',
+  SHOP_ISHASSETADMIN INTEGER(1) comment '是否已分配管理员',
+  SHOP_CREATETIME    DATETIME comment '加盟时间',
+  SHOP_ISDEL         INTEGER(1) comment '店铺是否删除 1 删除 0正常',
+  constraint PK_SHOPS primary key (SHOP_ID),
+  constraint FK_SHOPS_RELATIONS_CATEGORI foreign key (SHOP_CATEGORY_ID)  references CATEGORIES (CATEGORY_ID)
+)ENGINE=InnoDB DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci COMMENT='店铺';
+
+create table EXCHANGGIFTS
+(
+  EXCHANGGIFTS_ID         INTEGER not null AUTO_INCREMENT  comment '礼品编号',
+  SHOP_ID                 INTEGER comment '店铺编号',
+  EXCHANGGIFTS_GIFTCODE   VARCHAR(255) comment '礼品编码',
+  EXCHANGGIFTS_GIFTNAME   VARCHAR(255) comment '礼品名称',
+  EXCHANGGIFTS_PHOTO      VARCHAR(255) comment '礼品图片',
+  EXCHANGGIFTS_POINT      INTEGER(5) comment '所需积分',
+  EXCHANGGIFTS_INTEGER     INTEGER(5) comment '总数量',
+  EXCHANGGIFTS_EXCHANGNUM INTEGER(5) comment '已兑换的数量',
+  EXCHANGGIFTS_REMARK     VARCHAR(255) comment '联系人',
+  EXCHANGGIFTS_STATE      INTEGER(1) comment '礼品状态',
+  EXCHANGGIFTS_ISDEL      INTEGER(1) comment '礼品是否删除 1 删除 0正常',
+  constraint PK_EXCHANGGIFTS primary key (EXCHANGGIFTS_ID),
+  constraint FK_EXCHANGG_RELATIONS_SHOPS foreign key (SHOP_ID) references SHOPS (SHOP_ID)
+)ENGINE=InnoDB DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci COMMENT='礼品';
+
+create table MEMCARDS
+(
+  MEMCARDS_ID             INTEGER not null AUTO_INCREMENT  comment '会员编号',
+  CARDLEVELS_ID           INTEGER comment '等级编号',
+  SHOP_ID                 INTEGER comment '店铺编号',
+  MEMCARDS_CARDID         varchar(50) comment '会员卡号',
+  MEMCARDS_PASSWORD       varchar(20) comment '卡片密码',
+  MEMCARDS_NAME           varchar(20) comment '会员姓名',
+  MEMCARDS_SEX            varchar(6) comment '会员性别',
+  MEMCARDS_MOBILE         varchar(50) comment '手机号码',
+  MEMCARDS_PHOTO          varchar(200) comment '靓照',
+  MEMCARDS_BIRTHDAY_MONTH INTEGER(2) comment '会员生日--月',
+  MEMCARDS_BIRTHDAY_DAY   INTEGER(2) comment '会员生日--日',
+  MEMCARDS_BIRTHDAYTYPE   INTEGER(1) comment '会员生日类型',
+  MEMCARDS_ISPAST         INTEGER(1) comment '是否设置卡片过期时间',
+  MEMCARDS_PASTTIME       DATE comment '卡片过期时间',
+  MEMCARDS_POINT          INTEGER(7) comment '当前积分',
+  MEMCARDS_MONEY          FLOAT(7,2) comment '卡片付费',
+  MEMCARDS_TOTALMONEY     FLOAT(10,2) comment '累计消费',
+  MEMCARDS_TOTALCOUNT     INTEGER(5) comment '累计消费次数',
+  MEMCARDS_STATE          INTEGER comment '卡片状态',
+  MEMCARDS_ISPOINTAUTO    INTEGER(1) comment '积分是否可以自动换成等级',
+  MEMCARDS_REFERERID      INTEGER comment '推荐人ID',
+  MEMCARDS_REFERERCARD    varchar(50) comment '推荐人卡号',
+  MEMCARDS_REFERERNAME    varchar(20) comment '推荐人姓名',
+  MEMCARDS_CREATETIME     DATETIME comment '登记日期',
+  MEMCARDS_ISDEL          INTEGER(1) comment '会员是否删除 1 删除 0正常',
+  constraint PK_MEMCARDS primary key (MEMCARDS_ID),
+  constraint FK_MEMCARDS_RELATIONS_CARDLEVE foreign key (CARDLEVELS_ID)  references CARDLEVELS (CARDLEVELS_ID),
+  constraint FK_MEMCARDS_RELATIONS_CATEGORI foreign key (MEMCARDS_STATE) references CATEGORIES (CATEGORY_ID),
+  constraint FK_MEMCARDS_RELATIONS_SHOPS foreign key (SHOP_ID) references SHOPS (SHOP_ID)
+)ENGINE=InnoDB DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci COMMENT='会员';
+
+create table USERS
+(
+  USERS_ID        INTEGER not null AUTO_INCREMENT  comment '用户编号',
+  SHOP_ID         INTEGER comment '店铺编号',
+  USERS_LOGINNAME VARCHAR(20) comment '用户登录名',
+  USERS_PASSWORD  varchar(255) comment '密码',
+  USERS_REALNAME  varchar(20) comment '真实姓名',
+  USERS_SEX       varchar(6) comment '性别',
+  USERS_TELEPHONE varchar(20) comment '电话',
+  USERS_ROLE      INTEGER comment '角色',
+  USERS_CANDELETE INTEGER(1) comment '用户编号',
+  USERS_ISDEL     INTEGER(1) comment '用户是否删除 1 删除 0正常',
+  constraint PK_USERS primary key (USERS_ID),
+  constraint FK_USERS_RELATIONS_CATEGORI foreign key (USERS_ROLE) references CATEGORIES (CATEGORY_ID),
+  constraint FK_USERS_RELATIONS_SHOPS foreign key (SHOP_ID) references SHOPS (SHOP_ID)
+)ENGINE=InnoDB DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci COMMENT='用户';
+
+create table CONSUMEORDERS
+(
+  CONSUMEORDERS_ID            INTEGER not null AUTO_INCREMENT  comment '消费编号',
+  SHOP_ID                     INTEGER comment '店铺编号',
+  USERS_ID                    INTEGER comment '用户编号',
+  CONSUMEORDERS_ORDERCODE     varchar(20) comment '订单号',
+  CONSUMEORDERS_ORDERTYPE     INTEGER comment '订单类型',
+  MEMCARDS_ID                 INTEGER comment '会员编号',
+  MEMCARDS_CARDID             varchar(50) comment '会员卡号',
+  EXCHANGGIFTS_ID             INTEGER comment '礼品编号',
+  CONSUMEORDERS_TOTALMONEY    FLOAT(7,2) comment '额度',
+  CONSUMEORDERS_DISCOUNTMONEY FLOAT(7,2) comment '实际支付',
+  CONSUMEORDERS_GAVEPOINT     INTEGER(5) comment '兑/减积分',
+  CONSUMEORDERS_RECASH        FLOAT(7,2) comment '积分返现',
+  CONSUMEORDERS_REMARK        varchar(255) comment '备注',
+  CONSUMEORDERS_CREATETIME    DATETIME comment '订单时间',
+  CONSUMEORDERS_ISDEL         INTEGER(1) comment '订单是否删除 1 删除 0正常',
+  constraint PK_CONSUMEORDERS primary key (CONSUMEORDERS_ID),
+  constraint FK_CONSUMEO_RELATIONS_CATEGORI foreign key (CONSUMEORDERS_ORDERTYPE) references CATEGORIES (CATEGORY_ID),
+  constraint FK_CONSUMEO_RELATIONS_EXCHANGG foreign key (EXCHANGGIFTS_ID) references EXCHANGGIFTS (EXCHANGGIFTS_ID),
+  constraint FK_CONSUMEO_RELATIONS_MEMCARDS foreign key (MEMCARDS_ID) references MEMCARDS (MEMCARDS_ID),
+  constraint FK_CONSUMEO_RELATIONS_SHOPS foreign key (SHOP_ID) references SHOPS (SHOP_ID),
+  constraint FK_CONSUMEO_RELATIONS_USERS foreign key (USERS_ID) references USERS (USERS_ID)
+)ENGINE=InnoDB DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci COMMENT='消费订单';
+
+create table EXCHANGLOGS
+(
+  EXCHANGLOGS_ID         INTEGER not null AUTO_INCREMENT  comment '交易编号',
+  SHOP_ID                INTEGER comment '店铺编号',
+  USERS_ID               INTEGER comment '用户编号',
+  MEMCARDS_ID            INTEGER comment '会员编号',
+  MEMCARDS_CARDID        varchar(50) comment '会员卡号',
+  MEMCARDS_NAME          varchar(20) comment '会员姓名',
+  EXCHANGGIFTS_ID        INTEGER comment '礼品编号',
+  EXCHANGGIFTS_GIFTCODE  varchar(255) comment '礼品编码',
+  EXCHANGGIFTS_GIFTNAME  varchar(255) comment '礼品名称',
+  EXCHANGLOGS_NUMBER     INTEGER(5) comment '数量',
+  EXCHANGLOGS_POINT      INTEGER(7) comment '积分',
+  EXCHANGLOGS_CREATETIME DATETIME comment '交易时间',
+  EXCHANGLOGS_ISDEL      INTEGER(1) comment '交易记录是否删除 1 删除 0正常',
+	constraint PK_EXCHANGLOGS primary key (EXCHANGLOGS_ID),
+  constraint FK_EXCHANGL_RELATIONS_EXCHANGG foreign key (EXCHANGGIFTS_ID) references EXCHANGGIFTS (EXCHANGGIFTS_ID),
+  constraint FK_EXCHANGL_RELATIONS_MEMCARDS foreign key (MEMCARDS_ID) references MEMCARDS (MEMCARDS_ID),
+	constraint FK_EXCHANGL_RELATIONS_SHOPS foreign key (SHOP_ID) references SHOPS (SHOP_ID),
+	constraint FK_EXCHANGL_RELATIONS_USERS foreign key (USERS_ID) references USERS (USERS_ID)
+)ENGINE=InnoDB DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci COMMENT='交易记录';
+
+create table TRANSFERLOGS
+(
+  TRANSFERLOGS_ID            INTEGER not null AUTO_INCREMENT  comment '编号',
+  SHOP_ID                    INTEGER comment '店铺编号',
+  USERS_ID                   INTEGER comment '用户编号',
+  TRANSFERLOGS_FROMMC_ID     INTEGER,
+  TRANSFERLOGS_FROMMC_CARDID varchar(50),
+  TRANSFERLOGS_TOMC_ID       INTEGER,
+  TRANSFERLOGS_TOMC_CARDID   VARCHAR(50),
+  TRANSFERLOGS_TRANSFERMONEY FLOAT(7,2),
+  TRANSFERLOGS_REMARK        varchar(255),
+  TRANSFERLOGS_CREATETIME    DATE,
+  TRANSFERLOGS_ISDEL         INTEGER(1) comment '记录是否删除 1 删除 0正常',
+	constraint PK_TRANSFERLOGS primary key (TRANSFERLOGS_ID),
+	constraint FK_TRANSFER_RELATIONS_SHOPS foreign key (SHOP_ID) references SHOPS (SHOP_ID),
+	constraint FK_TRANSFER_RELATIONS_USERS foreign key (USERS_ID)references USERS (USERS_ID)
+)ENGINE=InnoDB DEFAULT CHARACTER SET=utf8 COLLATE=utf8_unicode_ci COMMENT='';
+
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (1, '青铜会员', 100, .8, 1);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (2, '白银会员', 200, .82, 1);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (3, '黄金会员', 500, .84, 1);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (4, '黄金一级会员', 1000, .85, 1);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (5, '黄金二级会员', 2000, .86, 1);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (6, '黄金三级会员', 3000, .87, 1);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (7, '铂金一级会员', 4000, .88, .95);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (8, '铂金二级会员', 5000, .89, .93);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (9, '铂金三级会员', 6000, .9, .92);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (10, '铂金四级会员', 7000, .91, .91);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (11, '尊贵钻石会员', 10000, .95, .9);
+insert into CARDLEVELS (CARDLEVELS_ID, CARDLEVELS_LEVELNAME, CARDLEVELS_NEEDPOINT, CARDLEVELS_POINT, CARDLEVELS_PERCENT)
+values (12, '心悦会员', 20000, 1, .85);
+
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (1, 'B_State', '订单状态', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (2, 'C_UseCharacter', '使用性质', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (3, 'C_VehicleCategory', '车辆类型', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (4, 'CredentialCategory', '货物单位', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (5, 'G_Unit', '网点类别', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (6, 'N_NetCategory', '开户银行', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (7, 'SR_Bank', '客户类别', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (8, 'SR_UserCategory', '用户角色', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (9, 'U_Role', '提取方式', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (10, 'W_ArriveCategory', '运输方式', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (11, 'WD_WrapCategory', '包装方式', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (12, 'WP_PayCategory', '付款方式', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (13, 'SP_Category', '店铺类型', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (14, 'CD_State', '会员卡状态', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (15, 'CS_Category', '订单类型', null, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (101, 'SP_Category', '加盟店', 13, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (102, 'SP_Category', '总店', 13, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (103, 'SP_Category', '自营店', 13, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (110, 'SR_UserCategory', '店长', 8, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (111, 'SR_UserCategory', '业务员', 8, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (112, 'SR_UserCategory', '系统管理员', 8, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (130, 'CD_State', '正常', 14, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (131, 'CD_State', '挂失', 14, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (132, 'CD_State', '锁定', 14, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (150, 'CS_Category', '快速消费', 15, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (151, 'CS_Category', '减积分', 15, 0);
+insert into CATEGORIES (CATEGORY_ID, CATEGORY_NAME, CATEGORY_TITLE, CATEGORY_PID, CATEGORY_ISDEL)
+values (152, 'CS_Category', '积分返现', 15, 0);
+commit;
+
+
+
+
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (1, null, 'admin', 'admin', '流浪者', '男', '110', 110, 1, 0);
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (11, null, 'tom2', '111111', '李四1', '女', '111111222', null, null, null);
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (12, null, 'tom3', '22222', '22222', '女', '2222', null, null, null);
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (4, null, 'tom4', '321', '张三丰4', '男', '110', 112, 1, 1);
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (5, null, 'tom5', '123', '张三丰5', '男', '110', 111, 1, 1);
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (6, null, 'tom6', '123', '张三丰6', '男', '110', 112, 1, 1);
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (7, null, 'tom7', '123', '张三丰7', '男', '110', 110, 1, 1);
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (8, null, 'tom8', '123', '张三丰8', '男', '110', null, 1, 1);
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (9, null, 'tom9', '123', '张三丰9', '男', '110', null, 1, 1);
+insert into USERS (USERS_ID, SHOP_ID, USERS_LOGINNAME, USERS_PASSWORD, USERS_REALNAME, USERS_SEX, USERS_TELEPHONE, USERS_ROLE, USERS_CANDELETE, USERS_ISDEL)
+values (10, null, 'tom10', '123', '张三丰10', '男', '110', null, 1, 1);
+
+
+insert into SHOPS (SHOP_ID, SHOP_NAME, SHOP_CATEGORY_ID, SHOP_CONTACTNAME, SHOP_CONTACTTEL, SHOP_ADDRESS, SHOP_REMARK, SHOP_ISHASSETADMIN, SHOP_CREATETIME, SHOP_ISDEL)
+values (1, '店铺1', 101, '联系人996', '996', '春和路996号', null, 1, now(), 0);
+insert into SHOPS (SHOP_ID, SHOP_NAME, SHOP_CATEGORY_ID, SHOP_CONTACTNAME, SHOP_CONTACTTEL, SHOP_ADDRESS, SHOP_REMARK, SHOP_ISHASSETADMIN, SHOP_CREATETIME, SHOP_ISDEL)
+values (2, '店铺2', 102, '联系人997', '997', '春和路997号', null, 1, now(), 0);
+
+DELIMITER ;; 
+CREATE  PROCEDURE proc4()
+BEGIN 
+DECLARE y TINYINT DEFAULT 3;
+WHILE y<100
+DO
+insert into SHOPS (SHOP_NAME, SHOP_CATEGORY_ID, SHOP_CONTACTNAME, SHOP_CONTACTTEL, SHOP_ADDRESS, SHOP_REMARK, SHOP_ISHASSETADMIN, SHOP_CREATETIME, SHOP_ISDEL)
+values (CONCAT('店铺',y), 101+FLOOR(RAND()*3), '联系人997', '997', '春和路997号', null, FLOOR(RAND()*2), now(), 0);
+SET y=y+1; 
+END WHILE ; 
+commit; 
+END;; 
+call proc4();
+
+-- ----------------------------
+-- Records of exchanggifts
+-- ----------------------------
+INSERT INTO `exchanggifts` VALUES ('1', null, 'li001', '大块糖', '', '10', '6', '8', '限时供应', null, null);
+INSERT INTO `exchanggifts` VALUES ('2', null, 'li002', '女朋友', '', '10000', '1', '0', '只此一次,错过就过', null, null);
+INSERT INTO `exchanggifts` VALUES ('3', null, 'li003', '华为荣耀', '', '300', '4', '0', '荣耀带着你', null, null);
+

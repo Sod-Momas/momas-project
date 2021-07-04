@@ -1,0 +1,97 @@
+/*清除浮动*/
+.clearfix:before,
+.clearfix:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+.clearfix {
+	zoom: 1;
+}
+/*头部*/
+.header {
+	width: 100%;
+	height: inherit;
+	overflow: hidden;
+	color: #FFF;
+	background-color: #2e70cc;
+	overflow-wrap: break-word;
+	font-size: 15px;
+}
+
+.header-left{
+	height: inherit;
+	display: inline-block;
+}
+.header-left>*{
+	display: inline-block;
+	margin-right: 20px;
+	vertical-align: middle;
+	
+}
+
+.header-right{
+	float: right;
+	height: inherit;
+	display: inline-block;
+}
+.header-right>*{
+	display: inline-block;
+	margin-right: 15px;
+	vertical-align: middle;
+}
+.header-right .close{
+	text-indent: 1em;
+	background: no-repeat left center url(../img/icon_Delete.gif);
+	cursor: pointer;
+}
+.header-right .manager{
+	color: white;
+	font-size: 14px;
+}
+.header-right .manager:hover{
+	color: black;
+}
+.header-right .manager #manager-menu{
+	width:150px;
+}
+#nav-left{
+	width: 200px;
+}
+#menus{
+	overflow: hidden;
+}
+#menus ul{
+	display: block;
+	list-style: none;
+	padding: 0;
+}
+#menus ul li{
+	padding: 5px 10px;
+	text-indent: 2em;
+	background: no-repeat 1em center url(../img/icon1.gif);
+}
+#menus ul li:hover{
+	background-color: #00BBEE;
+	}
+#menus ul li>a{
+	display: block;
+	cursor: pointer;
+}
+
+a:link {
+	color: black;
+	text-decoration: none;
+}
+
+a:visited {
+	color: black;
+}
+
+a:hover {
+	color: black;
+}
+
+a:active {
+	color: black;
+}
