@@ -28,6 +28,13 @@
             <version>0.1.2-SNAPSHOT</version>
         </dependency>
 
+
+        <!-- Jackson Json处理工具包 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
         <!-- 文件转换为MS Office办公文件 -->
         <dependency>
             <groupId>org.apache.poi</groupId>

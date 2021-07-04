@@ -10,11 +10,15 @@ import org.springframework.web.context.request.WebRequest;
 
 public class CustomDateConvert implements WebBindingInitializer {
 
-	@Override
-	public void initBinder(WebDataBinder binder, WebRequest request) {
+	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		CustomDateEditor cde = new CustomDateEditor(dateFormat, true);
 		binder.registerCustomEditor(Date.class,cde);
+
 	}
 
+	@Override
+	public void initBinder(WebDataBinder binder, WebRequest request) {
+		this.initBinder(binder);
+	}
 }
