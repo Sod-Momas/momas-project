@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>momas-customer-common</module>
+        <module>momas-customer-pojo</module>
     </modules>
 
     <properties>
