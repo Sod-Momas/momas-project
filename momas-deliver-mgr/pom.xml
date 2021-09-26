@@ -17,6 +17,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>momas-deliver-mgr-common</module>
+        <module>momas-deliver-mgr-pojo</module>
     </modules>
 
     <properties>
