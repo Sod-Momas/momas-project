@@ -20,6 +20,7 @@
         <module>momas-deliver-mgr-pojo</module>
         <module>momas-deliver-mgr-interface</module>
         <module>momas-deliver-mgr-dao</module>
+        <module>momas-deliver-mgr-service</module>
     </modules>
 
     <properties>
