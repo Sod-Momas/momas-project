@@ -1,0 +1,1 @@
+_> wsimport -s . -Xnocompile http://localhost:8080/mvn-customer-web/service/shops?wsdl
