@@ -20,6 +20,7 @@
         <module>momas-smbms</module>
         <module>momas-blog</module>
         <module>momas-customer</module>
+        <module>momas-deliver-mgr</module>
     </modules>
     <packaging>pom</packaging>
 
