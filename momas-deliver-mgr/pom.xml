@@ -18,6 +18,7 @@
     <modules>
         <module>momas-deliver-mgr-common</module>
         <module>momas-deliver-mgr-pojo</module>
+        <module>momas-deliver-mgr-interface</module>
     </modules>
 
     <properties>
