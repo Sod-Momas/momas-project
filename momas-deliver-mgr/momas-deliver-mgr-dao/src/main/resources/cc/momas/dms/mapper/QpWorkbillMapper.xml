@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cc.momas.dms.mapper.QpWorkbillMapper">
+    <resultMap id="BaseResultMap" type="cc.momas.dms.pojo.QpWorkbill">
+        <id column="workbill_id" property="workbillId" jdbcType="INTEGER"/>
+        <result column="noticebill_id" property="noticebillId" jdbcType="INTEGER"/>
+        <result column="staff_id" property="staffId" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="pickstate" property="pickstate" jdbcType="VARCHAR"/>
+        <result column="buildtime" property="buildtime" jdbcType="TIMESTAMP"/>
+        <result column="attachbilltimes" property="attachbilltimes" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <association property="staff" column="staff_id" select="cc.momas.dms.mapper.BcStaffMapper.selectByPrimaryKey"/>
+    </resultMap>
+
+
+    <select id="selectByPager" resultMap="BaseResultMap"
+            parameterType="cc.momas.dms.pojo.QpWorkbillExample">
+        select
+        <if test="entityExample != null">
+            <if test="entityExample.distinct">
+                distinct
+            </if>
+        </if>
+        <include refid="Base_Column_List"/>
+        from qp_workbill
+        <if test="entityExample != null">
+            <include refid="Pager_Where_Clause"/>
+        </if>
+        <if test="entityExample != null">
+            <if test="entityExample.orderByClause != null">
+                order by ${orderByClause}
+            </if>
+        </if>
+        LIMIT ${firstIndex},${pageSize}
+    </select>
+    <sql id="Pager_Where_Clause">
+        <where>
+            <foreach collection="entityExample.oredCriteria" item="criteria"
+                     separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                    and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        workbill_id, noticebill_id, staff_id, type, pickstate, buildtime, attachbilltimes,
+        remark
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="cc.momas.dms.pojo.QpWorkbillExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from qp_workbill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from qp_workbill
+        where workbill_id = #{workbillId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from qp_workbill
+        where workbill_id = #{workbillId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="cc.momas.dms.pojo.QpWorkbillExample">
+        delete from qp_workbill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="cc.momas.dms.pojo.QpWorkbill">
+        insert into qp_workbill (workbill_id, noticebill_id, staff_id,
+        type, pickstate, buildtime,
+        attachbilltimes, remark)
+        values (#{workbillId,jdbcType=INTEGER}, #{noticebillId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER},
+        #{type,jdbcType=VARCHAR}, #{pickstate,jdbcType=VARCHAR}, #{buildtime,jdbcType=TIMESTAMP},
+        #{attachbilltimes,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="cc.momas.dms.pojo.QpWorkbill">
+        insert into qp_workbill
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workbillId != null">
+                workbill_id,
+            </if>
+            <if test="noticebillId != null">
+                noticebill_id,
+            </if>
+            <if test="staffId != null">
+                staff_id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="pickstate != null">
+                pickstate,
+            </if>
+            <if test="buildtime != null">
+                buildtime,
+            </if>
+            <if test="attachbilltimes != null">
+                attachbilltimes,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workbillId != null">
+                #{workbillId,jdbcType=INTEGER},
+            </if>
+            <if test="noticebillId != null">
+                #{noticebillId,jdbcType=INTEGER},
+            </if>
+            <if test="staffId != null">
+                #{staffId,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="pickstate != null">
+                #{pickstate,jdbcType=VARCHAR},
+            </if>
+            <if test="buildtime != null">
+                #{buildtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="attachbilltimes != null">
+                #{attachbilltimes,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cc.momas.dms.pojo.QpWorkbillExample" resultType="java.lang.Integer">
+        select count(*) from qp_workbill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update qp_workbill
+        <set>
+            <if test="record.workbillId != null">
+                workbill_id = #{record.workbillId,jdbcType=INTEGER},
+            </if>
+            <if test="record.noticebillId != null">
+                noticebill_id = #{record.noticebillId,jdbcType=INTEGER},
+            </if>
+            <if test="record.staffId != null">
+                staff_id = #{record.staffId,jdbcType=INTEGER},
+            </if>
+            <if test="record.type != null">
+                type = #{record.type,jdbcType=VARCHAR},
+            </if>
+            <if test="record.pickstate != null">
+                pickstate = #{record.pickstate,jdbcType=VARCHAR},
+            </if>
+            <if test="record.buildtime != null">
+                buildtime = #{record.buildtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.attachbilltimes != null">
+                attachbilltimes = #{record.attachbilltimes,jdbcType=INTEGER},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update qp_workbill
+        set workbill_id = #{record.workbillId,jdbcType=INTEGER},
+        noticebill_id = #{record.noticebillId,jdbcType=INTEGER},
+        staff_id = #{record.staffId,jdbcType=INTEGER},
+        type = #{record.type,jdbcType=VARCHAR},
+        pickstate = #{record.pickstate,jdbcType=VARCHAR},
+        buildtime = #{record.buildtime,jdbcType=TIMESTAMP},
+        attachbilltimes = #{record.attachbilltimes,jdbcType=INTEGER},
+        remark = #{record.remark,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cc.momas.dms.pojo.QpWorkbill">
+        update qp_workbill
+        <set>
+            <if test="noticebillId != null">
+                noticebill_id = #{noticebillId,jdbcType=INTEGER},
+            </if>
+            <if test="staffId != null">
+                staff_id = #{staffId,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="pickstate != null">
+                pickstate = #{pickstate,jdbcType=VARCHAR},
+            </if>
+            <if test="buildtime != null">
+                buildtime = #{buildtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="attachbilltimes != null">
+                attachbilltimes = #{attachbilltimes,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where workbill_id = #{workbillId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cc.momas.dms.pojo.QpWorkbill">
+        update qp_workbill
+        set noticebill_id = #{noticebillId,jdbcType=INTEGER},
+        staff_id = #{staffId,jdbcType=INTEGER},
+        type = #{type,jdbcType=VARCHAR},
+        pickstate = #{pickstate,jdbcType=VARCHAR},
+        buildtime = #{buildtime,jdbcType=TIMESTAMP},
+        attachbilltimes = #{attachbilltimes,jdbcType=INTEGER},
+        remark = #{remark,jdbcType=VARCHAR}
+        where workbill_id = #{workbillId,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cc.momas.dms.mapper.QpWorkordermanageMapper">
+    <resultMap id="BaseResultMap" type="cc.momas.dms.pojo.QpWorkordermanage">
+        <id column="workordermanage_id" property="workordermanageId" jdbcType="INTEGER"/>
+        <result column="arrivecity" property="arrivecity" jdbcType="VARCHAR"/>
+        <result column="product" property="product" jdbcType="VARCHAR"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="weight" property="weight" jdbcType="DOUBLE"/>
+        <result column="floadreqr" property="floadreqr" jdbcType="VARCHAR"/>
+        <result column="prodtimelimit" property="prodtimelimit" jdbcType="VARCHAR"/>
+        <result column="prodtype" property="prodtype" jdbcType="VARCHAR"/>
+        <result column="sendername" property="sendername" jdbcType="VARCHAR"/>
+        <result column="senderphone" property="senderphone" jdbcType="VARCHAR"/>
+        <result column="senderaddr" property="senderaddr" jdbcType="VARCHAR"/>
+        <result column="receivername" property="receivername" jdbcType="VARCHAR"/>
+        <result column="receiverphone" property="receiverphone" jdbcType="VARCHAR"/>
+        <result column="receiveraddr" property="receiveraddr" jdbcType="VARCHAR"/>
+        <result column="feeitemnum" property="feeitemnum" jdbcType="INTEGER"/>
+        <result column="actlweit" property="actlweit" jdbcType="DOUBLE"/>
+        <result column="vol" property="vol" jdbcType="VARCHAR"/>
+        <result column="managerCheck" property="managercheck" jdbcType="VARCHAR"/>
+        <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        workordermanage_id, arrivecity, product, num, weight, floadreqr, prodtimelimit, prodtype,
+        sendername, senderphone, senderaddr, receivername, receiverphone, receiveraddr, feeitemnum,
+        actlweit, vol, managerCheck, updatetime
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="cc.momas.dms.pojo.QpWorkordermanageExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from qp_workordermanage
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from qp_workordermanage
+        where workordermanage_id = #{workordermanageId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from qp_workordermanage
+        where workordermanage_id = #{workordermanageId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="cc.momas.dms.pojo.QpWorkordermanageExample">
+        delete from qp_workordermanage
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="cc.momas.dms.pojo.QpWorkordermanage">
+        insert into qp_workordermanage (workordermanage_id, arrivecity, product,
+        num, weight, floadreqr,
+        prodtimelimit, prodtype, sendername,
+        senderphone, senderaddr, receivername,
+        receiverphone, receiveraddr, feeitemnum,
+        actlweit, vol, managerCheck,
+        updatetime)
+        values (#{workordermanageId,jdbcType=INTEGER}, #{arrivecity,jdbcType=VARCHAR}, #{product,jdbcType=VARCHAR},
+        #{num,jdbcType=INTEGER}, #{weight,jdbcType=DOUBLE}, #{floadreqr,jdbcType=VARCHAR},
+        #{prodtimelimit,jdbcType=VARCHAR}, #{prodtype,jdbcType=VARCHAR}, #{sendername,jdbcType=VARCHAR},
+        #{senderphone,jdbcType=VARCHAR}, #{senderaddr,jdbcType=VARCHAR}, #{receivername,jdbcType=VARCHAR},
+        #{receiverphone,jdbcType=VARCHAR}, #{receiveraddr,jdbcType=VARCHAR}, #{feeitemnum,jdbcType=INTEGER},
+        #{actlweit,jdbcType=DOUBLE}, #{vol,jdbcType=VARCHAR}, #{managercheck,jdbcType=VARCHAR},
+        #{updatetime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="cc.momas.dms.pojo.QpWorkordermanage">
+        insert into qp_workordermanage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workordermanageId != null">
+                workordermanage_id,
+            </if>
+            <if test="arrivecity != null">
+                arrivecity,
+            </if>
+            <if test="product != null">
+                product,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="weight != null">
+                weight,
+            </if>
+            <if test="floadreqr != null">
+                floadreqr,
+            </if>
+            <if test="prodtimelimit != null">
+                prodtimelimit,
+            </if>
+            <if test="prodtype != null">
+                prodtype,
+            </if>
+            <if test="sendername != null">
+                sendername,
+            </if>
+            <if test="senderphone != null">
+                senderphone,
+            </if>
+            <if test="senderaddr != null">
+                senderaddr,
+            </if>
+            <if test="receivername != null">
+                receivername,
+            </if>
+            <if test="receiverphone != null">
+                receiverphone,
+            </if>
+            <if test="receiveraddr != null">
+                receiveraddr,
+            </if>
+            <if test="feeitemnum != null">
+                feeitemnum,
+            </if>
+            <if test="actlweit != null">
+                actlweit,
+            </if>
+            <if test="vol != null">
+                vol,
+            </if>
+            <if test="managercheck != null">
+                managerCheck,
+            </if>
+            <if test="updatetime != null">
+                updatetime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workordermanageId != null">
+                #{workordermanageId,jdbcType=INTEGER},
+            </if>
+            <if test="arrivecity != null">
+                #{arrivecity,jdbcType=VARCHAR},
+            </if>
+            <if test="product != null">
+                #{product,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=DOUBLE},
+            </if>
+            <if test="floadreqr != null">
+                #{floadreqr,jdbcType=VARCHAR},
+            </if>
+            <if test="prodtimelimit != null">
+                #{prodtimelimit,jdbcType=VARCHAR},
+            </if>
+            <if test="prodtype != null">
+                #{prodtype,jdbcType=VARCHAR},
+            </if>
+            <if test="sendername != null">
+                #{sendername,jdbcType=VARCHAR},
+            </if>
+            <if test="senderphone != null">
+                #{senderphone,jdbcType=VARCHAR},
+            </if>
+            <if test="senderaddr != null">
+                #{senderaddr,jdbcType=VARCHAR},
+            </if>
+            <if test="receivername != null">
+                #{receivername,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverphone != null">
+                #{receiverphone,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveraddr != null">
+                #{receiveraddr,jdbcType=VARCHAR},
+            </if>
+            <if test="feeitemnum != null">
+                #{feeitemnum,jdbcType=INTEGER},
+            </if>
+            <if test="actlweit != null">
+                #{actlweit,jdbcType=DOUBLE},
+            </if>
+            <if test="vol != null">
+                #{vol,jdbcType=VARCHAR},
+            </if>
+            <if test="managercheck != null">
+                #{managercheck,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cc.momas.dms.pojo.QpWorkordermanageExample"
+            resultType="java.lang.Integer">
+        select count(*) from qp_workordermanage
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update qp_workordermanage
+        <set>
+            <if test="record.workordermanageId != null">
+                workordermanage_id = #{record.workordermanageId,jdbcType=INTEGER},
+            </if>
+            <if test="record.arrivecity != null">
+                arrivecity = #{record.arrivecity,jdbcType=VARCHAR},
+            </if>
+            <if test="record.product != null">
+                product = #{record.product,jdbcType=VARCHAR},
+            </if>
+            <if test="record.num != null">
+                num = #{record.num,jdbcType=INTEGER},
+            </if>
+            <if test="record.weight != null">
+                weight = #{record.weight,jdbcType=DOUBLE},
+            </if>
+            <if test="record.floadreqr != null">
+                floadreqr = #{record.floadreqr,jdbcType=VARCHAR},
+            </if>
+            <if test="record.prodtimelimit != null">
+                prodtimelimit = #{record.prodtimelimit,jdbcType=VARCHAR},
+            </if>
+            <if test="record.prodtype != null">
+                prodtype = #{record.prodtype,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sendername != null">
+                sendername = #{record.sendername,jdbcType=VARCHAR},
+            </if>
+            <if test="record.senderphone != null">
+                senderphone = #{record.senderphone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.senderaddr != null">
+                senderaddr = #{record.senderaddr,jdbcType=VARCHAR},
+            </if>
+            <if test="record.receivername != null">
+                receivername = #{record.receivername,jdbcType=VARCHAR},
+            </if>
+            <if test="record.receiverphone != null">
+                receiverphone = #{record.receiverphone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.receiveraddr != null">
+                receiveraddr = #{record.receiveraddr,jdbcType=VARCHAR},
+            </if>
+            <if test="record.feeitemnum != null">
+                feeitemnum = #{record.feeitemnum,jdbcType=INTEGER},
+            </if>
+            <if test="record.actlweit != null">
+                actlweit = #{record.actlweit,jdbcType=DOUBLE},
+            </if>
+            <if test="record.vol != null">
+                vol = #{record.vol,jdbcType=VARCHAR},
+            </if>
+            <if test="record.managercheck != null">
+                managerCheck = #{record.managercheck,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updatetime != null">
+                updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update qp_workordermanage
+        set workordermanage_id = #{record.workordermanageId,jdbcType=INTEGER},
+        arrivecity = #{record.arrivecity,jdbcType=VARCHAR},
+        product = #{record.product,jdbcType=VARCHAR},
+        num = #{record.num,jdbcType=INTEGER},
+        weight = #{record.weight,jdbcType=DOUBLE},
+        floadreqr = #{record.floadreqr,jdbcType=VARCHAR},
+        prodtimelimit = #{record.prodtimelimit,jdbcType=VARCHAR},
+        prodtype = #{record.prodtype,jdbcType=VARCHAR},
+        sendername = #{record.sendername,jdbcType=VARCHAR},
+        senderphone = #{record.senderphone,jdbcType=VARCHAR},
+        senderaddr = #{record.senderaddr,jdbcType=VARCHAR},
+        receivername = #{record.receivername,jdbcType=VARCHAR},
+        receiverphone = #{record.receiverphone,jdbcType=VARCHAR},
+        receiveraddr = #{record.receiveraddr,jdbcType=VARCHAR},
+        feeitemnum = #{record.feeitemnum,jdbcType=INTEGER},
+        actlweit = #{record.actlweit,jdbcType=DOUBLE},
+        vol = #{record.vol,jdbcType=VARCHAR},
+        managerCheck = #{record.managercheck,jdbcType=VARCHAR},
+        updatetime = #{record.updatetime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cc.momas.dms.pojo.QpWorkordermanage">
+        update qp_workordermanage
+        <set>
+            <if test="arrivecity != null">
+                arrivecity = #{arrivecity,jdbcType=VARCHAR},
+            </if>
+            <if test="product != null">
+                product = #{product,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null">
+                num = #{num,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null">
+                weight = #{weight,jdbcType=DOUBLE},
+            </if>
+            <if test="floadreqr != null">
+                floadreqr = #{floadreqr,jdbcType=VARCHAR},
+            </if>
+            <if test="prodtimelimit != null">
+                prodtimelimit = #{prodtimelimit,jdbcType=VARCHAR},
+            </if>
+            <if test="prodtype != null">
+                prodtype = #{prodtype,jdbcType=VARCHAR},
+            </if>
+            <if test="sendername != null">
+                sendername = #{sendername,jdbcType=VARCHAR},
+            </if>
+            <if test="senderphone != null">
+                senderphone = #{senderphone,jdbcType=VARCHAR},
+            </if>
+            <if test="senderaddr != null">
+                senderaddr = #{senderaddr,jdbcType=VARCHAR},
+            </if>
+            <if test="receivername != null">
+                receivername = #{receivername,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverphone != null">
+                receiverphone = #{receiverphone,jdbcType=VARCHAR},
+            </if>
+            <if test="receiveraddr != null">
+                receiveraddr = #{receiveraddr,jdbcType=VARCHAR},
+            </if>
+            <if test="feeitemnum != null">
+                feeitemnum = #{feeitemnum,jdbcType=INTEGER},
+            </if>
+            <if test="actlweit != null">
+                actlweit = #{actlweit,jdbcType=DOUBLE},
+            </if>
+            <if test="vol != null">
+                vol = #{vol,jdbcType=VARCHAR},
+            </if>
+            <if test="managercheck != null">
+                managerCheck = #{managercheck,jdbcType=VARCHAR},
+            </if>
+            <if test="updatetime != null">
+                updatetime = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where workordermanage_id = #{workordermanageId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cc.momas.dms.pojo.QpWorkordermanage">
+        update qp_workordermanage
+        set arrivecity = #{arrivecity,jdbcType=VARCHAR},
+        product = #{product,jdbcType=VARCHAR},
+        num = #{num,jdbcType=INTEGER},
+        weight = #{weight,jdbcType=DOUBLE},
+        floadreqr = #{floadreqr,jdbcType=VARCHAR},
+        prodtimelimit = #{prodtimelimit,jdbcType=VARCHAR},
+        prodtype = #{prodtype,jdbcType=VARCHAR},
+        sendername = #{sendername,jdbcType=VARCHAR},
+        senderphone = #{senderphone,jdbcType=VARCHAR},
+        senderaddr = #{senderaddr,jdbcType=VARCHAR},
+        receivername = #{receivername,jdbcType=VARCHAR},
+        receiverphone = #{receiverphone,jdbcType=VARCHAR},
+        receiveraddr = #{receiveraddr,jdbcType=VARCHAR},
+        feeitemnum = #{feeitemnum,jdbcType=INTEGER},
+        actlweit = #{actlweit,jdbcType=DOUBLE},
+        vol = #{vol,jdbcType=VARCHAR},
+        managerCheck = #{managercheck,jdbcType=VARCHAR},
+        updatetime = #{updatetime,jdbcType=TIMESTAMP}
+        where workordermanage_id = #{workordermanageId,jdbcType=INTEGER}
+    </update>
+</mapper>

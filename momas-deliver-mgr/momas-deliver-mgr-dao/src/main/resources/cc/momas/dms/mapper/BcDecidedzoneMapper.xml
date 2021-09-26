@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cc.momas.dms.mapper.BcDecidedzoneMapper">
+    <resultMap id="BaseResultMap" type="cc.momas.dms.pojo.BcDecidedzone">
+        <id column="decidedzone_id" property="decidedzoneId" jdbcType="INTEGER"/>
+        <result column="staff_id" property="staffId" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <association column="staff_id" property="staff" select="cc.momas.dms.mapper.BcStaffMapper.selectByPrimaryKey"/>
+    </resultMap>
+
+    <select id="selectByPager" resultMap="BaseResultMap"
+            parameterType="cc.momas.dms.pojo.BcDecidedzoneExample">
+        select
+        <if test="entityExample != null">
+            <if test="entityExample.distinct">
+                distinct
+            </if>
+        </if>
+        <include refid="Base_Column_List"/>
+        from bc_decidedzone
+        <if test="entityExample != null">
+            <include refid="Pager_Where_Clause"/>
+        </if>
+        <if test="entityExample != null">
+            <if test="entityExample.orderByClause != null">
+                order by ${orderByClause}
+            </if>
+        </if>
+        LIMIT ${firstIndex},${pageSize}
+    </select>
+
+
+    <sql id="Pager_Where_Clause">
+        <where>
+            <foreach collection="entityExample.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        decidedzone_id, staff_id, name
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="cc.momas.dms.pojo.BcDecidedzoneExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from bc_decidedzone
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from bc_decidedzone
+        where decidedzone_id = #{decidedzoneId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from bc_decidedzone
+        where decidedzone_id = #{decidedzoneId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="cc.momas.dms.pojo.BcDecidedzoneExample">
+        delete from bc_decidedzone
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="decidedzoneId"
+            parameterType="cc.momas.dms.pojo.BcDecidedzone">
+        insert into bc_decidedzone (decidedzone_id, staff_id, name
+        )
+        values (#{decidedzoneId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="cc.momas.dms.pojo.BcDecidedzone">
+        insert into bc_decidedzone
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="decidedzoneId != null">
+                decidedzone_id,
+            </if>
+            <if test="staffId != null">
+                staff_id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="decidedzoneId != null">
+                #{decidedzoneId,jdbcType=INTEGER},
+            </if>
+            <if test="staffId != null">
+                #{staffId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cc.momas.dms.pojo.BcDecidedzoneExample" resultType="java.lang.Integer">
+        select count(*) from bc_decidedzone
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update bc_decidedzone
+        <set>
+            <if test="record.decidedzoneId != null">
+                decidedzone_id = #{record.decidedzoneId,jdbcType=INTEGER},
+            </if>
+            <if test="record.staffId != null">
+                staff_id = #{record.staffId,jdbcType=INTEGER},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update bc_decidedzone
+        set decidedzone_id = #{record.decidedzoneId,jdbcType=INTEGER},
+        staff_id = #{record.staffId,jdbcType=INTEGER},
+        name = #{record.name,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cc.momas.dms.pojo.BcDecidedzone">
+        update bc_decidedzone
+        <set>
+            <if test="staffId != null">
+                staff_id = #{staffId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where decidedzone_id = #{decidedzoneId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cc.momas.dms.pojo.BcDecidedzone">
+        update bc_decidedzone
+        set staff_id = #{staffId,jdbcType=INTEGER},
+        name = #{name,jdbcType=VARCHAR}
+        where decidedzone_id = #{decidedzoneId,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cc.momas.dms.mapper.TUserMapper">
+    <resultMap id="BaseResultMap" type="cc.momas.dms.pojo.TUser">
+        <id column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="salary" property="salary" jdbcType="DOUBLE"/>
+        <result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+        <result column="gender" property="gender" jdbcType="VARCHAR"/>
+        <result column="station" property="station" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <collection property="roleList" ofType="cc.momas.dms.pojo.AuthRole" column="user_id"
+                    select="cc.momas.dms.mapper.AuthRoleMapper.selectByUserId"></collection>
+    </resultMap>
+
+
+    <select id="selectByPager" resultMap="BaseResultMap">
+        select
+        <if test="entityExample != null">
+            <if test="entityExample.distinct">
+                distinct
+            </if>
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_user
+        <if test="entityExample != null">
+            <include refid="Pager_Where_Clause"/>
+        </if>
+        <if test="entityExample != null">
+            <if test="entityExample.orderByClause != null">
+                order by ${orderByClause}
+            </if>
+        </if>
+        LIMIT ${firstIndex},${pageSize}
+    </select>
+    <sql id="Pager_Where_Clause">
+        <where>
+            <foreach collection="entityExample.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        user_id, username, password, salary, birthday, gender, station, telephone, remark
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="cc.momas.dms.pojo.TUserExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_user
+        where user_id = #{userId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="cc.momas.dms.pojo.TUserExample">
+        delete from t_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="userId" parameterType="cc.momas.dms.pojo.TUser">
+        insert into t_user (user_id, username, password,
+        salary, birthday, gender,
+        station, telephone, remark
+        )
+        values (#{userId,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{salary,jdbcType=DOUBLE}, #{birthday,jdbcType=TIMESTAMP}, #{gender,jdbcType=VARCHAR},
+        #{station,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="cc.momas.dms.pojo.TUser">
+        insert into t_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="salary != null">
+                salary,
+            </if>
+            <if test="birthday != null">
+                birthday,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="station != null">
+                station,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="salary != null">
+                #{salary,jdbcType=DOUBLE},
+            </if>
+            <if test="birthday != null">
+                #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="station != null">
+                #{station,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cc.momas.dms.pojo.TUserExample" resultType="java.lang.Integer">
+        select count(*) from t_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_user
+        <set>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=INTEGER},
+            </if>
+            <if test="record.username != null">
+                username = #{record.username,jdbcType=VARCHAR},
+            </if>
+            <if test="record.password != null">
+                password = #{record.password,jdbcType=VARCHAR},
+            </if>
+            <if test="record.salary != null">
+                salary = #{record.salary,jdbcType=DOUBLE},
+            </if>
+            <if test="record.birthday != null">
+                birthday = #{record.birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.gender != null">
+                gender = #{record.gender,jdbcType=VARCHAR},
+            </if>
+            <if test="record.station != null">
+                station = #{record.station,jdbcType=VARCHAR},
+            </if>
+            <if test="record.telephone != null">
+                telephone = #{record.telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_user
+        set user_id = #{record.userId,jdbcType=INTEGER},
+        username = #{record.username,jdbcType=VARCHAR},
+        password = #{record.password,jdbcType=VARCHAR},
+        salary = #{record.salary,jdbcType=DOUBLE},
+        birthday = #{record.birthday,jdbcType=TIMESTAMP},
+        gender = #{record.gender,jdbcType=VARCHAR},
+        station = #{record.station,jdbcType=VARCHAR},
+        telephone = #{record.telephone,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cc.momas.dms.pojo.TUser">
+        update t_user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="salary != null">
+                salary = #{salary,jdbcType=DOUBLE},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="station != null">
+                station = #{station,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cc.momas.dms.pojo.TUser">
+        update t_user
+        set username = #{username,jdbcType=VARCHAR},
+        password = #{password,jdbcType=VARCHAR},
+        salary = #{salary,jdbcType=DOUBLE},
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+        gender = #{gender,jdbcType=VARCHAR},
+        station = #{station,jdbcType=VARCHAR},
+        telephone = #{telephone,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR}
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
+</mapper>

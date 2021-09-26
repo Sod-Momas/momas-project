@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cc.momas.dms.mapper.QpNoticebillMapper">
+    <resultMap id="BaseResultMap" type="cc.momas.dms.pojo.QpNoticebill">
+        <id column="noticebill_id" property="noticebillId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="staff_id" property="staffId" jdbcType="INTEGER"/>
+        <result column="customer_id" property="customerId" jdbcType="VARCHAR"/>
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+        <result column="delegater" property="delegater" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="pickaddress" property="pickaddress" jdbcType="VARCHAR"/>
+        <result column="arrivecity" property="arrivecity" jdbcType="VARCHAR"/>
+        <result column="product" property="product" jdbcType="VARCHAR"/>
+        <result column="pickdate" property="pickdate" jdbcType="TIMESTAMP"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="weight" property="weight" jdbcType="DOUBLE"/>
+        <result column="volume" property="volume" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="ordertype" property="ordertype" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectByPager" resultMap="BaseResultMap"
+            parameterType="cc.momas.dms.pojo.QpNoticebillExample">
+        select
+        <if test="entityExample != null">
+            <if test="entityExample.distinct">
+                distinct
+            </if>
+        </if>
+        <include refid="Base_Column_List"/>
+        from qp_noticebill
+        <if test="entityExample != null">
+            <include refid="Pager_Where_Clause"/>
+        </if>
+        <if test="entityExample != null">
+            <if test="entityExample.orderByClause != null">
+                order by ${orderByClause}
+            </if>
+        </if>
+        LIMIT ${firstIndex},${pageSize}
+    </select>
+    <sql id="Pager_Where_Clause">
+        <where>
+            <foreach collection="entityExample.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        noticebill_id, user_id, staff_id, customer_id, customer_name, delegater, telephone,
+        pickaddress, arrivecity, product, pickdate, num, weight, volume, remark, ordertype
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="cc.momas.dms.pojo.QpNoticebillExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from qp_noticebill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from qp_noticebill
+        where noticebill_id = #{noticebillId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from qp_noticebill
+        where noticebill_id = #{noticebillId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="cc.momas.dms.pojo.QpNoticebillExample">
+        delete from qp_noticebill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="cc.momas.dms.pojo.QpNoticebill" useGeneratedKeys="true"
+            keyProperty="noticebillId">
+        insert into qp_noticebill (noticebill_id, user_id, staff_id,
+        customer_id, customer_name, delegater,
+        telephone, pickaddress, arrivecity,
+        product, pickdate, num,
+        weight, volume, remark,
+        ordertype)
+        values (#{noticebillId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER},
+        #{customerId,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, #{delegater,jdbcType=VARCHAR},
+        #{telephone,jdbcType=VARCHAR}, #{pickaddress,jdbcType=VARCHAR}, #{arrivecity,jdbcType=VARCHAR},
+        #{product,jdbcType=VARCHAR}, #{pickdate,jdbcType=TIMESTAMP}, #{num,jdbcType=INTEGER},
+        #{weight,jdbcType=DOUBLE}, #{volume,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+        #{ordertype,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="cc.momas.dms.pojo.QpNoticebill">
+        insert into qp_noticebill
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noticebillId != null">
+                noticebill_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="staffId != null">
+                staff_id,
+            </if>
+            <if test="customerId != null">
+                customer_id,
+            </if>
+            <if test="customerName != null">
+                customer_name,
+            </if>
+            <if test="delegater != null">
+                delegater,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="pickaddress != null">
+                pickaddress,
+            </if>
+            <if test="arrivecity != null">
+                arrivecity,
+            </if>
+            <if test="product != null">
+                product,
+            </if>
+            <if test="pickdate != null">
+                pickdate,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="weight != null">
+                weight,
+            </if>
+            <if test="volume != null">
+                volume,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="ordertype != null">
+                ordertype,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noticebillId != null">
+                #{noticebillId,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="staffId != null">
+                #{staffId,jdbcType=INTEGER},
+            </if>
+            <if test="customerId != null">
+                #{customerId,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null">
+                #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="delegater != null">
+                #{delegater,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="pickaddress != null">
+                #{pickaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="arrivecity != null">
+                #{arrivecity,jdbcType=VARCHAR},
+            </if>
+            <if test="product != null">
+                #{product,jdbcType=VARCHAR},
+            </if>
+            <if test="pickdate != null">
+                #{pickdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null">
+                #{weight,jdbcType=DOUBLE},
+            </if>
+            <if test="volume != null">
+                #{volume,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="ordertype != null">
+                #{ordertype,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cc.momas.dms.pojo.QpNoticebillExample" resultType="java.lang.Integer">
+        select count(*) from qp_noticebill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update qp_noticebill
+        <set>
+            <if test="record.noticebillId != null">
+                noticebill_id = #{record.noticebillId,jdbcType=INTEGER},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=INTEGER},
+            </if>
+            <if test="record.staffId != null">
+                staff_id = #{record.staffId,jdbcType=INTEGER},
+            </if>
+            <if test="record.customerId != null">
+                customer_id = #{record.customerId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.customerName != null">
+                customer_name = #{record.customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.delegater != null">
+                delegater = #{record.delegater,jdbcType=VARCHAR},
+            </if>
+            <if test="record.telephone != null">
+                telephone = #{record.telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.pickaddress != null">
+                pickaddress = #{record.pickaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="record.arrivecity != null">
+                arrivecity = #{record.arrivecity,jdbcType=VARCHAR},
+            </if>
+            <if test="record.product != null">
+                product = #{record.product,jdbcType=VARCHAR},
+            </if>
+            <if test="record.pickdate != null">
+                pickdate = #{record.pickdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.num != null">
+                num = #{record.num,jdbcType=INTEGER},
+            </if>
+            <if test="record.weight != null">
+                weight = #{record.weight,jdbcType=DOUBLE},
+            </if>
+            <if test="record.volume != null">
+                volume = #{record.volume,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ordertype != null">
+                ordertype = #{record.ordertype,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update qp_noticebill
+        set noticebill_id = #{record.noticebillId,jdbcType=INTEGER},
+        user_id = #{record.userId,jdbcType=INTEGER},
+        staff_id = #{record.staffId,jdbcType=INTEGER},
+        customer_id = #{record.customerId,jdbcType=VARCHAR},
+        customer_name = #{record.customerName,jdbcType=VARCHAR},
+        delegater = #{record.delegater,jdbcType=VARCHAR},
+        telephone = #{record.telephone,jdbcType=VARCHAR},
+        pickaddress = #{record.pickaddress,jdbcType=VARCHAR},
+        arrivecity = #{record.arrivecity,jdbcType=VARCHAR},
+        product = #{record.product,jdbcType=VARCHAR},
+        pickdate = #{record.pickdate,jdbcType=TIMESTAMP},
+        num = #{record.num,jdbcType=INTEGER},
+        weight = #{record.weight,jdbcType=DOUBLE},
+        volume = #{record.volume,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=VARCHAR},
+        ordertype = #{record.ordertype,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cc.momas.dms.pojo.QpNoticebill">
+        update qp_noticebill
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="staffId != null">
+                staff_id = #{staffId,jdbcType=INTEGER},
+            </if>
+            <if test="customerId != null">
+                customer_id = #{customerId,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null">
+                customer_name = #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="delegater != null">
+                delegater = #{delegater,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="pickaddress != null">
+                pickaddress = #{pickaddress,jdbcType=VARCHAR},
+            </if>
+            <if test="arrivecity != null">
+                arrivecity = #{arrivecity,jdbcType=VARCHAR},
+            </if>
+            <if test="product != null">
+                product = #{product,jdbcType=VARCHAR},
+            </if>
+            <if test="pickdate != null">
+                pickdate = #{pickdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="num != null">
+                num = #{num,jdbcType=INTEGER},
+            </if>
+            <if test="weight != null">
+                weight = #{weight,jdbcType=DOUBLE},
+            </if>
+            <if test="volume != null">
+                volume = #{volume,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="ordertype != null">
+                ordertype = #{ordertype,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where noticebill_id = #{noticebillId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cc.momas.dms.pojo.QpNoticebill">
+        update qp_noticebill
+        set user_id = #{userId,jdbcType=INTEGER},
+        staff_id = #{staffId,jdbcType=INTEGER},
+        customer_id = #{customerId,jdbcType=VARCHAR},
+        customer_name = #{customerName,jdbcType=VARCHAR},
+        delegater = #{delegater,jdbcType=VARCHAR},
+        telephone = #{telephone,jdbcType=VARCHAR},
+        pickaddress = #{pickaddress,jdbcType=VARCHAR},
+        arrivecity = #{arrivecity,jdbcType=VARCHAR},
+        product = #{product,jdbcType=VARCHAR},
+        pickdate = #{pickdate,jdbcType=TIMESTAMP},
+        num = #{num,jdbcType=INTEGER},
+        weight = #{weight,jdbcType=DOUBLE},
+        volume = #{volume,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR},
+        ordertype = #{ordertype,jdbcType=VARCHAR}
+        where noticebill_id = #{noticebillId,jdbcType=INTEGER}
+    </update>
+</mapper>

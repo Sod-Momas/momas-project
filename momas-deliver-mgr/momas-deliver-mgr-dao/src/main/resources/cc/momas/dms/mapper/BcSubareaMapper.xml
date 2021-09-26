@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cc.momas.dms.mapper.BcSubareaMapper">
+    <resultMap id="BaseResultMap" type="cc.momas.dms.pojo.BcSubarea">
+        <id column="subarea_id" property="subareaId" jdbcType="INTEGER"/>
+        <result column="decidedzone_id" property="decidedzoneId" jdbcType="INTEGER"/>
+        <result column="region_id" property="regionId" jdbcType="INTEGER"/>
+        <result column="addresskey" property="addresskey" jdbcType="VARCHAR"/>
+        <result column="startnum" property="startnum" jdbcType="VARCHAR"/>
+        <result column="endnum" property="endnum" jdbcType="VARCHAR"/>
+        <result column="single" property="single" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="VARCHAR"/>
+        <association property="region" column="region_id"
+                     select="cc.momas.dms.mapper.BcRegionMapper.selectByPrimaryKey"></association>
+        <association property="decidedzone" column="decidedzone_id"
+                     select="cc.momas.dms.mapper.BcDecidedzoneMapper.selectByPrimaryKey"></association>
+    </resultMap>
+
+
+    <update id="setDecidedzoneIdNull" parameterType="INTEGER">
+        update bc_subarea SET decidedzone_id=null WHERE
+        decidedzone_id=${decidedzoneId}
+    </update>
+
+    <!-- 查询饼图所需要的数据 -->
+    <select id="selectSubareasGroupByProvince" resultType="cc.momas.dms.pojo.ProvCount"
+            parameterType="cc.momas.dms.pojo.BcSubareaExample">
+        select r.province name,count(*) data from bc_subarea s LEFT OUTER JOIN bc_region r
+        ON s.region_id=r.region_id GROUP BY r.province
+    </select>
+
+    <select id="selectByPager" resultMap="BaseResultMap">
+        select
+        <if test="entityExample != null">
+            <if test="entityExample.distinct">
+                distinct
+            </if>
+        </if>
+        <include refid="Base_Column_List"/>
+        from bc_subarea
+        <if test="entityExample != null">
+            <include refid="Pager_Where_Clause"/>
+        </if>
+        <if test="entityExample != null">
+            <if test="entityExample.orderByClause != null">
+                order by ${orderByClause}
+            </if>
+        </if>
+        LIMIT ${firstIndex},${pageSize}
+    </select>
+    <sql id="Pager_Where_Clause">
+        <where>
+            <foreach collection="entityExample.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        subarea_id, decidedzone_id, region_id, addresskey, startnum, endnum, single, position
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="cc.momas.dms.pojo.BcSubareaExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from bc_subarea
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from bc_subarea
+        where subarea_id = #{subareaId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from bc_subarea
+        where subarea_id = #{subareaId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="cc.momas.dms.pojo.BcSubareaExample">
+        delete from bc_subarea
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="cc.momas.dms.pojo.BcSubarea">
+        insert into bc_subarea (subarea_id, decidedzone_id, region_id,
+        addresskey, startnum, endnum,
+        single, position)
+        values (#{subareaId,jdbcType=INTEGER}, #{decidedzoneId,jdbcType=INTEGER}, #{regionId,jdbcType=INTEGER},
+        #{addresskey,jdbcType=VARCHAR}, #{startnum,jdbcType=VARCHAR}, #{endnum,jdbcType=VARCHAR},
+        #{single,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="cc.momas.dms.pojo.BcSubarea">
+        insert into bc_subarea
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subareaId != null">
+                subarea_id,
+            </if>
+            <if test="decidedzoneId != null">
+                decidedzone_id,
+            </if>
+            <if test="regionId != null">
+                region_id,
+            </if>
+            <if test="addresskey != null">
+                addresskey,
+            </if>
+            <if test="startnum != null">
+                startnum,
+            </if>
+            <if test="endnum != null">
+                endnum,
+            </if>
+            <if test="single != null">
+                single,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subareaId != null">
+                #{subareaId,jdbcType=INTEGER},
+            </if>
+            <if test="decidedzoneId != null">
+                #{decidedzoneId,jdbcType=INTEGER},
+            </if>
+            <if test="regionId != null">
+                #{regionId,jdbcType=INTEGER},
+            </if>
+            <if test="addresskey != null">
+                #{addresskey,jdbcType=VARCHAR},
+            </if>
+            <if test="startnum != null">
+                #{startnum,jdbcType=VARCHAR},
+            </if>
+            <if test="endnum != null">
+                #{endnum,jdbcType=VARCHAR},
+            </if>
+            <if test="single != null">
+                #{single,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                #{position,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cc.momas.dms.pojo.BcSubareaExample" resultType="java.lang.Integer">
+        select count(*) from bc_subarea
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update bc_subarea
+        <set>
+            <if test="record.subareaId != null">
+                subarea_id = #{record.subareaId,jdbcType=INTEGER},
+            </if>
+            <if test="record.decidedzoneId != null">
+                decidedzone_id = #{record.decidedzoneId,jdbcType=INTEGER},
+            </if>
+            <if test="record.regionId != null">
+                region_id = #{record.regionId,jdbcType=INTEGER},
+            </if>
+            <if test="record.addresskey != null">
+                addresskey = #{record.addresskey,jdbcType=VARCHAR},
+            </if>
+            <if test="record.startnum != null">
+                startnum = #{record.startnum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.endnum != null">
+                endnum = #{record.endnum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.single != null">
+                single = #{record.single,jdbcType=VARCHAR},
+            </if>
+            <if test="record.position != null">
+                position = #{record.position,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update bc_subarea
+        set subarea_id = #{record.subareaId,jdbcType=INTEGER},
+        decidedzone_id = #{record.decidedzoneId,jdbcType=INTEGER},
+        region_id = #{record.regionId,jdbcType=INTEGER},
+        addresskey = #{record.addresskey,jdbcType=VARCHAR},
+        startnum = #{record.startnum,jdbcType=VARCHAR},
+        endnum = #{record.endnum,jdbcType=VARCHAR},
+        single = #{record.single,jdbcType=VARCHAR},
+        position = #{record.position,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cc.momas.dms.pojo.BcSubarea">
+        update bc_subarea
+        <set>
+            <if test="decidedzoneId != null">
+                decidedzone_id = #{decidedzoneId,jdbcType=INTEGER},
+            </if>
+            <if test="regionId != null">
+                region_id = #{regionId,jdbcType=INTEGER},
+            </if>
+            <if test="addresskey != null">
+                addresskey = #{addresskey,jdbcType=VARCHAR},
+            </if>
+            <if test="startnum != null">
+                startnum = #{startnum,jdbcType=VARCHAR},
+            </if>
+            <if test="endnum != null">
+                endnum = #{endnum,jdbcType=VARCHAR},
+            </if>
+            <if test="single != null">
+                single = #{single,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position = #{position,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where subarea_id = #{subareaId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cc.momas.dms.pojo.BcSubarea">
+        update bc_subarea
+        set decidedzone_id = #{decidedzoneId,jdbcType=INTEGER},
+        region_id = #{regionId,jdbcType=INTEGER},
+        addresskey = #{addresskey,jdbcType=VARCHAR},
+        startnum = #{startnum,jdbcType=VARCHAR},
+        endnum = #{endnum,jdbcType=VARCHAR},
+        single = #{single,jdbcType=VARCHAR},
+        position = #{position,jdbcType=VARCHAR}
+        where subarea_id = #{subareaId,jdbcType=INTEGER}
+    </update>
+</mapper>

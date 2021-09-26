@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cc.momas.dms.mapper.AuthFunctionMapper">
+    <resultMap id="BaseResultMap" type="cc.momas.dms.pojo.AuthFunction">
+        <id column="auth_fuction_id" property="authFuctionId" jdbcType="INTEGER"/>
+        <result column="pid" property="pid" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="page" property="page" jdbcType="VARCHAR"/>
+        <result column="generatemenu" property="generatemenu" jdbcType="VARCHAR"/>
+        <result column="zindex" property="zindex" jdbcType="INTEGER"/>
+        <association property="parentFunc" column="pid" select="selectByPrimaryKey"/>
+    </resultMap>
+
+    <!-- 通过用户id查询所有权限的菜单-->
+    <select id="selectByUserId" resultMap="BaseResultMap"
+            parameterType="int">
+        SELECT DISTINCT f.*
+        FROM auth_function f
+        LEFT OUTER JOIN role_function rf ON f.auth_fuction_id=rf.role_function_id
+        LEFT OUTER JOIN user_role ur ON rf.role_id=ur.role_id
+        WHERE ur.user_id=#{id} AND f.generatemenu='1'
+        Order by f.zindex
+        ASC
+    </select>
+    <!-- 通过userId查询所有权限 -->
+    <select id="selectAllFunctionByUserId" resultMap="BaseResultMap"
+            parameterType="int">
+        SELECT DISTINCT f.*
+        FROM auth_function f
+        LEFT OUTER JOIN role_function rf ON f.auth_fuction_id=rf.role_function_id
+        LEFT OUTER JOIN user_role ur ON rf.role_id=ur.role_id
+        WHERE ur.user_id=#{id}
+        Order by f.zindex
+        ASC
+    </select>
+    <select id="selectByPager" resultMap="BaseResultMap">
+        select
+        <if test="entityExample != null">
+            <if test="entityExample.distinct">
+                distinct
+            </if>
+        </if>
+        <include refid="Base_Column_List"/>
+        from auth_function
+        <if test="entityExample != null">
+            <if test="entityExample._parameter != null">
+                <include refid="Pager_Where_Clause"/>
+            </if>
+        </if>
+        <if test="entityExample != null">
+            <if test="entityExample.orderByClause != null">
+                order by ${orderByClause}
+            </if>
+        </if>
+        LIMIT ${firstIndex},${pageSize}
+    </select>
+
+    <sql id="Pager_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="entityExample.criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        auth_fuction_id, pid, name, code, description, page, generatemenu, zindex
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="cc.momas.dms.pojo.AuthFunctionExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from auth_function
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from auth_function
+        where auth_fuction_id = #{authFuctionId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from auth_function
+        where auth_fuction_id = #{authFuctionId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="cc.momas.dms.pojo.AuthFunctionExample">
+        delete from auth_function
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="cc.momas.dms.pojo.AuthFunction">
+        insert into auth_function (auth_fuction_id, pid, name,
+        code, description, page,
+        generatemenu, zindex)
+        values (#{authFuctionId,jdbcType=INTEGER}, #{pid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+        #{code,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{page,jdbcType=VARCHAR},
+        #{generatemenu,jdbcType=VARCHAR}, #{zindex,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="cc.momas.dms.pojo.AuthFunction">
+        insert into auth_function
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="authFuctionId != null">
+                auth_fuction_id,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="page != null">
+                page,
+            </if>
+            <if test="generatemenu != null">
+                generatemenu,
+            </if>
+            <if test="zindex != null">
+                zindex,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="authFuctionId != null">
+                #{authFuctionId,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="page != null">
+                #{page,jdbcType=VARCHAR},
+            </if>
+            <if test="generatemenu != null">
+                #{generatemenu,jdbcType=VARCHAR},
+            </if>
+            <if test="zindex != null">
+                #{zindex,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="cc.momas.dms.pojo.AuthFunctionExample" resultType="java.lang.Integer">
+        select count(*) from auth_function
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update auth_function
+        <set>
+            <if test="record.authFuctionId != null">
+                auth_fuction_id = #{record.authFuctionId,jdbcType=INTEGER},
+            </if>
+            <if test="record.pid != null">
+                pid = #{record.pid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.code != null">
+                code = #{record.code,jdbcType=VARCHAR},
+            </if>
+            <if test="record.description != null">
+                description = #{record.description,jdbcType=VARCHAR},
+            </if>
+            <if test="record.page != null">
+                page = #{record.page,jdbcType=VARCHAR},
+            </if>
+            <if test="record.generatemenu != null">
+                generatemenu = #{record.generatemenu,jdbcType=VARCHAR},
+            </if>
+            <if test="record.zindex != null">
+                zindex = #{record.zindex,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update auth_function
+        set auth_fuction_id = #{record.authFuctionId,jdbcType=INTEGER},
+        pid = #{record.pid,jdbcType=VARCHAR},
+        name = #{record.name,jdbcType=VARCHAR},
+        code = #{record.code,jdbcType=VARCHAR},
+        description = #{record.description,jdbcType=VARCHAR},
+        page = #{record.page,jdbcType=VARCHAR},
+        generatemenu = #{record.generatemenu,jdbcType=VARCHAR},
+        zindex = #{record.zindex,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cc.momas.dms.pojo.AuthFunction">
+        update auth_function
+        <set>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="page != null">
+                page = #{page,jdbcType=VARCHAR},
+            </if>
+            <if test="generatemenu != null">
+                generatemenu = #{generatemenu,jdbcType=VARCHAR},
+            </if>
+            <if test="zindex != null">
+                zindex = #{zindex,jdbcType=INTEGER},
+            </if>
+        </set>
+        where auth_fuction_id = #{authFuctionId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cc.momas.dms.pojo.AuthFunction">
+        update auth_function
+        set pid = #{pid,jdbcType=VARCHAR},
+        name = #{name,jdbcType=VARCHAR},
+        code = #{code,jdbcType=VARCHAR},
+        description = #{description,jdbcType=VARCHAR},
+        page = #{page,jdbcType=VARCHAR},
+        generatemenu = #{generatemenu,jdbcType=VARCHAR},
+        zindex = #{zindex,jdbcType=INTEGER}
+        where auth_fuction_id = #{authFuctionId,jdbcType=INTEGER}
+    </update>
+</mapper>
