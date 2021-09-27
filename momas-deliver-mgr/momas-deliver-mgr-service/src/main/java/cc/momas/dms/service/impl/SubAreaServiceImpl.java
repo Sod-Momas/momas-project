@@ -7,7 +7,7 @@ import cc.momas.dms.pojo.BcSubareaExample.Criteria;
 import cc.momas.dms.pojo.ProvCount;
 import cc.momas.dms.service.ISubAreaService;
 import cc.momas.util.Pager;
-import com.alibaba.druid.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
