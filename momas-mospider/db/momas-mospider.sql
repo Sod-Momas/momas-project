@@ -1,0 +1,13 @@
+# MySQL
+CREATE SCHEMA `momas-mospider` DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_bin;
+USE momas-mospider;
+
+CREATE TABLE `momas-mospider`.`spider_data` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `page_url` VARCHAR(512) NULL COMMENT '页面地址',
+  `page_title` VARCHAR(512) NULL COMMENT '页面标题',
+  `insert_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON update CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+COMMENT = '蜘蛛数据表';
