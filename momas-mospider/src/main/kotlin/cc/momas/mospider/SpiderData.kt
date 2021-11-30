@@ -17,4 +17,6 @@ data class SpiderData(
     val insertTime: LocalDateTime,
     @Column(name = "update_time")
     val updateTime: LocalDateTime,
-)
+) {
+    constructor(url: String, title: String) : this(null, url, title, LocalDateTime.now(), LocalDateTime.now())
+}
