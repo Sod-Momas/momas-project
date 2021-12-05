@@ -13,9 +13,21 @@
         <file>momas-mospider.log</file>
         <append>true</append><!-- 日志追加 -->
         <encoder>
-            <pattern>%d{yyyy-mm-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-mm-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
+
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">　　　　　　
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">　　　　　　　　　
+            <fileNamePattern>momas-mospider.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-mm-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+<!--            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>-->
+        </encoder>
+    </appender>
+
     <!-- 将日志写入数据库 -->
     <!--    <appender name="DB-CLASSIC-MYSQL-POOL" class="ch.qos.logback.classic.db.DBAppender">-->
     <!--        <connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">-->
@@ -29,7 +41,8 @@
     <!--    </appender>-->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
+        <!--        <appender-ref ref="FILE"/>-->
+        <appender-ref ref="ROLLING_FILE"/>
         <!--        <appender-ref ref="DB-CLASSIC-MYSQL-POOL" />-->
     </root>
 </configuration>
