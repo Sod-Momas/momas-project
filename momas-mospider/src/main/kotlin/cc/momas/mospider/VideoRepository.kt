@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.stereotype.Repository
 
 @Repository
-interface SpiderDataRepository : JpaRepository<SpiderData, Long>, JpaSpecificationExecutor<SpiderData> {
-//    fun count(): Int
+interface VideoRepository : JpaRepository<VideoDetail, Long>, JpaSpecificationExecutor<VideoDetail> {
 }

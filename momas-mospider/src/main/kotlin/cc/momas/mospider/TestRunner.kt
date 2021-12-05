@@ -17,7 +17,7 @@ import java.util.stream.IntStream
 //    TestRunner().run(null)
 //}
 
-@Component
+//@Component
 class TestRunner() : ApplicationRunner {
     val log: Logger = LoggerFactory.getLogger(TestRunner::class.java)
 

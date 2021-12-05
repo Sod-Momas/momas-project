@@ -4,7 +4,6 @@ import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
 
 @SpringBootTest
 class MomasMospiderApplicationTests {
@@ -14,8 +13,7 @@ class MomasMospiderApplicationTests {
 
     @Test
     fun contextLoads() {
-        val spiderData =
-            SpiderData(null, "url", "title", LocalDateTime.now(), LocalDateTime.now())
+        val spiderData = SpiderData("url", "title")
         spiderDataRepository.save(spiderData);
     }
 
@@ -24,6 +22,7 @@ class MomasMospiderApplicationTests {
         val byId = spiderDataRepository.getById(1L)
         println(byId)
     }
+
     @Test
     fun jsoupGetTest(): Unit {
         val url = "http://www.baidu.com"

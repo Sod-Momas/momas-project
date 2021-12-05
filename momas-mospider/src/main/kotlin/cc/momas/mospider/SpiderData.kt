@@ -7,7 +7,7 @@ import javax.persistence.*
 @Table(name = "spider_data")
 data class SpiderData(
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long?,
     @Column(name = "page_url")
     val pageUrl: String,
@@ -17,6 +17,8 @@ data class SpiderData(
     val insertTime: LocalDateTime,
     @Column(name = "update_time")
     val updateTime: LocalDateTime,
+    @Column(name = "had_detail")
+    var hadDetail: Boolean,
 ) {
-    constructor(url: String, title: String) : this(null, url, title, LocalDateTime.now(), LocalDateTime.now())
+    constructor(url: String, title: String) : this(null, url, title, LocalDateTime.now(), LocalDateTime.now(),false)
 }
