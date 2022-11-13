@@ -3,23 +3,26 @@ package cc.momas.mospider
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.slf4j.LoggerFactory
-import org.springframework.boot.ApplicationArguments
-import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.annotation.PostConstruct
 
 @Component
-class GetDetailFromPageRunner : ApplicationRunner {
+class GetDetailFromPageRunner {
     private val repository: VideoRepository
     private val spiderRepository: SpiderDataRepository
     private val log = LoggerFactory.getLogger(GetDetailFromPageRunner::class.java)
     private val HOST = "http://btjc.xyz"
     private val BASE_DIR = "O:/spider"
+    val regex = Regex("[:/\\\\]")
+
+    //    private val threadPool = Executors.newFixedThreadPool(2)
     private val UA =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36 Edg/96.0.1054.41 Android"
 
@@ -31,27 +34,33 @@ class GetDetailFromPageRunner : ApplicationRunner {
         }
     }
 
+    @PostConstruct
+    fun startTask() {
+        run()
+    }
+
     constructor(repository: VideoRepository, spiderRepository: SpiderDataRepository) {
         this.repository = repository;
         this.spiderRepository = spiderRepository;
     }
 
-    override fun run(args: ApplicationArguments?) {
+    fun run() {
         val all = spiderRepository.findAll();
-        var count = 0
+//        var count = 0
         for (data in all) {
+//            threadPool.submit {
             try {
-                if (data.hadDetail) {
-                    log.info("had detail:{}", data.pageTitle)
-                    continue
-                }
-                log.info("get detail page,id={},url={}", data.id, data.pageUrl)
-                val doc = Jsoup.connect(HOST + data.pageUrl).get()
-                val content = doc.selectFirst("#content") ?: continue
-                val detail = resolveDetail(data, content);
-                saveDetail(data, detail)
+//                    if (data.hadDetail) {
+//                        log.info("had detail:{}", data.pageTitle)
+//                        continue
+//                    }
+                if (!data.hadDetail) {
+                    log.info("get detail page,id={},url={}", data.id, data.pageUrl)
+                    val doc = Jsoup.connect(HOST + data.pageUrl).get()
+                    val detail = resolveDetail(data, doc);
+                    saveDetail(data, detail)
 
-                count++;
+//                        count++;
 //                if (count % 20 == 0) {
 //                    log.info("have a rest! 1 minutes.")
 //                    TimeUnit.MINUTES.sleep(1)
@@ -63,14 +72,22 @@ class GetDetailFromPageRunner : ApplicationRunner {
 //                    log.info("prepare to next, 20 seconds.")
 //                    TimeUnit.SECONDS.sleep(20)
 //                }
+                } else {
+                    log.info("had detail:{}", data.pageTitle)
+                }
             } catch (e: Exception) {
-                log.error("throw error,sleep 1 minute.", e)
-                TimeUnit.MINUTES.sleep(1)
+//                    log.error("throw error,sleep 1 minute.", e)
+                log.error("throw error", e)
+//                    TimeUnit.MINUTES.sleep(1)
             }
+//            }
         }
     }
 
-    private fun resolveDetail(listItem: SpiderData, content: Element): VideoDetailDto {
+    private fun resolveDetail(listItem: SpiderData, doc: Element): VideoDetailDto {
+        val content = doc.selectFirst("#content")
+            ?: throw RuntimeException(String.format("#content not exist!,id=%s,url=%s", listItem.id, listItem.pageUrl))
+
         // 视频基
         val base64 =
             content.selectFirst("script")?.data()?.replace("document.write(d('", "")?.replace("'));", "")
@@ -151,27 +168,16 @@ class GetDetailFromPageRunner : ApplicationRunner {
             videoTorrentLink = dto.videoTorrentLink.orEmpty()
 
         )
-        repository.save(detail)
         // 如果是null就使用0L
         val itemId = listItem.id ?: 0L
         downloadFile(itemId, dto)
+        repository.save(detail)
         listItem.hadDetail = true
         spiderRepository.save(listItem)
     }
 
     private fun downloadFile(id: Long, dto: VideoDetailDto) {
-        val dir = StringBuilder().append(id).append("_").append(dto.pageTitle).toString()
-        val root = Paths.get(BASE_DIR, dir)
-        if (Files.notExists(root)) {
-            Files.createDirectories(root)
-        } else {
-            // 说明该数据需要重新抓取，删除所有文件重新生成
-            Files.walk(root).forEach {
-                if (Files.isRegularFile(it)) {
-                    Files.delete(it)
-                }
-            }
-        }
+        val root = cleanRoot(id, dto)
         Files.write(root.resolve(dto.pageTitle!! + ".txt"), (dto.videoMagnet ?: "").toByteArray())
 
 //        TimeUnit.SECONDS.sleep(1)
@@ -199,25 +205,46 @@ class GetDetailFromPageRunner : ApplicationRunner {
         if (dto.videoImages.isEmpty()) {
             return
         }
-        dto.videoImages.forEach {
+        dto.videoImages.stream().parallel().forEach {
+            // download images
+            log.info("get img, id={}, url={}", id, it)
+            val connect = URL(HOST + it).openConnection() as HttpURLConnection
             try {
-                // download images
-                log.info("get img, id={}, url={}", id, it)
-                val img = URL(HOST + it).openConnection() as HttpURLConnection
                 val dest = root.resolve(filename(it))
                 if (Files.notExists(dest.parent)) {
                     Files.createDirectories(dest.parent)
                 }
-                img.setRequestProperty("User-Agent", UA)
-                img.readTimeout = 6000
-                img.connectTimeout = 6000
-                img.connect()
-                Files.copy(img.inputStream, dest)
-                img.disconnect()
+                connect.setRequestProperty("User-Agent", UA)
+                connect.readTimeout = 6000
+                connect.connectTimeout = 6000
+                connect.connect()
+                Files.copy(connect.inputStream, dest)
             } catch (e: Exception) {
                 log.error("picture catch error, item id={}", id, e)
+            } finally {
+                connect.disconnect()
             }
         }
+    }
+
+    private fun cleanRoot(id: Long, dto: VideoDetailDto): Path {
+        var title = dto.pageTitle ?: throw RuntimeException("title null!,id=$id")
+        if (title.contains(regex)) {
+            title = title.replace(regex, " ")
+        }
+        val dir = StringBuilder().append(id).append("_").append(title).toString()
+        val root = Paths.get(BASE_DIR, dir)
+        if (Files.notExists(root)) {
+            Files.createDirectories(root)
+        } else {
+            // 说明该数据需要重新抓取，删除所有文件重新生成
+            Files.walk(root).forEach {
+                if (Files.isRegularFile(it)) {
+                    Files.delete(it)
+                }
+            }
+        }
+        return root
     }
 
     private fun filename(url: String?): String {
