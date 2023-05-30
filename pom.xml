@@ -23,6 +23,7 @@
         <module>momas-blog</module>
         <module>momas-customer</module>
         <module>momas-deliver-mgr</module>
+        <module>momas-faker</module>
     </modules>
     <packaging>pom</packaging>
 

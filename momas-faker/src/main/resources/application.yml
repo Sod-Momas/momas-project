@@ -1,0 +1,10 @@
+spring:
+  sql:
+    init:
+      platform: postgresql
+  # DB
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/momas_faker?useUnicode=true&characterEncoding=utf8&&serverTimezone=Asia/Shanghai
+    username: postgres
+    password: 123456
